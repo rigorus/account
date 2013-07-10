@@ -8,12 +8,12 @@ import javax.swing.JInternalFrame;
 import javax.swing.JInternalFrame.JDesktopIcon;
 
 
-public class DistributorApplication extends javax.swing.JFrame {
+public class AccountApplication extends javax.swing.JFrame {
 
     /**
-     * Creates new form DistributorApplication
+     * Creates new form AccountApplication
      */
-    public DistributorApplication() {
+    public AccountApplication() {
         initComponents();
         this.setIconImage(new ImageIcon("resource/distributor_64.png").getImage());
     }
@@ -36,11 +36,6 @@ public class DistributorApplication extends javax.swing.JFrame {
         exitMenuItem = new javax.swing.JMenuItem();
         referenceMenu = new javax.swing.JMenu();
         nomenclatureMenuItem = new javax.swing.JMenuItem();
-        editMenu = new javax.swing.JMenu();
-        cutMenuItem = new javax.swing.JMenuItem();
-        copyMenuItem = new javax.swing.JMenuItem();
-        pasteMenuItem = new javax.swing.JMenuItem();
-        deleteMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
@@ -78,6 +73,7 @@ public class DistributorApplication extends javax.swing.JFrame {
         referenceMenu.setText("Справочники");
 
         nomenclatureMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        nomenclatureMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/sirius/account/ui/goods_16.png"))); // NOI18N
         nomenclatureMenuItem.setText("Номенклатура");
         nomenclatureMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -87,27 +83,6 @@ public class DistributorApplication extends javax.swing.JFrame {
         referenceMenu.add(nomenclatureMenuItem);
 
         menuBar.add(referenceMenu);
-
-        editMenu.setMnemonic('e');
-        editMenu.setText("Edit");
-
-        cutMenuItem.setMnemonic('t');
-        cutMenuItem.setText("Cut");
-        editMenu.add(cutMenuItem);
-
-        copyMenuItem.setMnemonic('y');
-        copyMenuItem.setText("Copy");
-        editMenu.add(copyMenuItem);
-
-        pasteMenuItem.setMnemonic('p');
-        pasteMenuItem.setText("Paste");
-        editMenu.add(pasteMenuItem);
-
-        deleteMenuItem.setMnemonic('d');
-        deleteMenuItem.setText("Delete");
-        editMenu.add(deleteMenuItem);
-
-        menuBar.add(editMenu);
 
         helpMenu.setMnemonic('h');
         helpMenu.setText("Help");
@@ -155,18 +130,13 @@ public class DistributorApplication extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenuItem contentMenuItem;
-    private javax.swing.JMenuItem copyMenuItem;
-    private javax.swing.JMenuItem cutMenuItem;
-    private javax.swing.JMenuItem deleteMenuItem;
     private javax.swing.JDesktopPane desktopPane;
-    private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem nomenclatureMenuItem;
     private javax.swing.JMenuItem openMenuItem;
-    private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JMenu referenceMenu;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;

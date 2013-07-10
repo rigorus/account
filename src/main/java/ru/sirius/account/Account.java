@@ -1,6 +1,6 @@
 package ru.sirius.account;
 
-import ru.sirius.account.ui.DistributorApplication;
+import ru.sirius.account.ui.AccountApplication;
 
 public class Account {
 
@@ -17,20 +17,20 @@ public class Account {
 //                }
 //            }
 //        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(DistributorApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(AccountApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(DistributorApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(AccountApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(DistributorApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(AccountApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(DistributorApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(AccountApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new DistributorApplication().setVisible(true);                
+                new AccountApplication().setVisible(true);                
             }
         });
     }
