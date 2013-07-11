@@ -1,5 +1,6 @@
 package ru.sirius.account.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,7 +13,10 @@ import ru.sirius.account.model.Group;
 import ru.sirius.account.model.entity.Goods;
 import ru.sirius.account.model.nomenclature.NmTreePrototype;
 
-
+/**
+ * TODO иметь 2 списка товаров один для редактирования другой только для чтения !!!
+ * @author MorozovIA
+ */
 public class GoodsService {
     
     public static GoodsService getInstance() {
@@ -23,11 +27,14 @@ public class GoodsService {
         private static final GoodsService INSTANCE = new GoodsService();
     }
 
-    private List<Goods> goods;    
+    private ArrayList<Goods> goods;    
     private long version; 
         
     private GoodsService() {        
         goods = GoodsProvider.getGoods();
+    }
+    
+    public void getRoot(){
     }
         
     public void addGoods(Goods goods){

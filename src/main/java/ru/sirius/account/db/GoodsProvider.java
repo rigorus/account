@@ -14,14 +14,14 @@ public class GoodsProvider {
     
     private static final Logger LOGGER = Logger.getLogger(GoodsProvider.class);
     
-    public static List<Goods> getGoods(){
+    public static ArrayList<Goods> getGoods(){
         
         Connection connection = DbUtils.getConnection();
 
-        List<Goods> goods = new ArrayList<>();
+        ArrayList<Goods> goods = new ArrayList<>();
         
         try (Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery("SELECT * FROM goods")) {
+                ResultSet rs = statement.executeQuery("SELECT * FROM goods ORDER BY depth_index")) {
 
             while (rs.next()) {
                 Goods article = new Goods();
