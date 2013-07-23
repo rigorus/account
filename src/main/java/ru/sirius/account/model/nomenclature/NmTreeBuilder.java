@@ -13,8 +13,8 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.swing.tree.TreeNode;
 //import ru.sirius.account.db.NomenclatureHelper;
-import ru.sirius.account.model.Article;
-import ru.sirius.account.model.Group;
+import ru.sirius.account.model.entity.Article;
+import ru.sirius.account.model.entity.Category;
 
 
 
@@ -32,13 +32,13 @@ public class NmTreeBuilder {
 //        NmSimpleNode root = null;        
 //        Map<Integer, NmSimpleNode> nodes = new HashMap<>();
 //
-//        for (Group group : prototype.getGroups().values()) {
+//        for (Category group : prototype.getGroups().values()) {
 //            NmSimpleNode node = new NmSimpleNode(NmNode.NodeType.GROUP, group.getId());
 //            nodes.put(group.getId(), node);
 //        }
 //
 //        for (NmSimpleNode node : nodes.values()) {
-//            Group group = prototype.getGroups().get(node.getId());
+//            Category group = prototype.getGroups().get(node.getId());
 //            if (group.getParentId() == 0) {
 //                root = node;
 //            } else {
@@ -55,7 +55,7 @@ public class NmTreeBuilder {
 //        NmSimpleNode root = null;
 //        Map<Integer, NmSimpleNode> nodes = new HashMap<>();
 //        
-//        for (Group group : prototype.getGroups().values()) {
+//        for (Category group : prototype.getGroups().values()) {
 //            NmSimpleNode node = new NmSimpleNode(NmNode.NodeType.GROUP, group.getId());
 //            nodes.put(group.getId(), node);
 //
@@ -69,7 +69,7 @@ public class NmTreeBuilder {
 //        }
 //
 //        for (NmSimpleNode node : nodes.values()) {            
-//            Group group = prototype.getGroups().get(node.getId());
+//            Category group = prototype.getGroups().get(node.getId());
 //            if (group.getParentId() == 0) {
 //                root = node;
 //            } else {
@@ -82,7 +82,7 @@ public class NmTreeBuilder {
 //    
 //    public NmNode buidSelectionTree() {
 //        
-//        for (Group group : prototype.getGroups().values()) {
+//        for (Category group : prototype.getGroups().values()) {
 //            if( !group.hasParent() ){
 //                NmSimpleNode node = new NmSimpleNode(NmNode.NodeType.GROUP, group.getId());
 //                return node;

@@ -2,16 +2,7 @@ package ru.sirius.account.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.swing.tree.DefaultMutableTreeNode;
-import ru.sirius.account.db.GoodsProvider;
-import ru.sirius.account.model.Article;
-import ru.sirius.account.model.Group;
-import ru.sirius.account.model.entity.Goods;
-import ru.sirius.account.model.nomenclature.NmTreePrototype;
+import ru.sirius.account.model.entity.Article;
 
 /**
  * TODO иметь 2 списка товаров один для редактирования другой только для чтения !!!
@@ -27,29 +18,29 @@ public class GoodsService {
         private static final GoodsService INSTANCE = new GoodsService();
     }
 
-    private ArrayList<Goods> goods;    
+    private ArrayList<Article> goods;    
     private long version; 
         
     private GoodsService() {        
-        goods = GoodsProvider.getGoods();
+//        goods = GoodsProvider.getGoods();
     }
     
     public void getRoot(){
     }
         
-    public void addGoods(Goods goods){
+    public void addGoods(Article goods){
         
     }
     
-    public void removeGoods(Goods goods){
+    public void removeGoods(Article goods){
         
     }
     
-    public void replaceGoods(Goods goods, Goods parent){
+    public void replaceGoods(Article goods, Article parent){
         
     }
     
-    public void replaceGoods(Collection<Goods> goods, Goods parent){
+    public void replaceGoods(Collection<Article> goods, Article parent){
         
     }
     
@@ -71,7 +62,7 @@ public class GoodsService {
 //    private static class NomenclatureTreePrototypeImp implements NmTreePrototype{
 //
 //        private Map<Integer, Article> articles;
-//        private Map<Integer, Group> groups;
+//        private Map<Integer, Category> groups;
 //        private long version = 0;
 //
 //        private NomenclatureTreePrototypeImp(List<Article> articles, List<Group> groups, long version ) {
@@ -84,7 +75,7 @@ public class GoodsService {
 //                this.articles.put(article.getId(), article.clone());
 //            }
 //
-//            for (Group group : groups) {
+//            for (Category group : groups) {
 //                this.groups.put(group.getId(), group.clone());
 //            }
 //        }
@@ -100,7 +91,7 @@ public class GoodsService {
 //        //лучше переделать на enumenator + доступ к отдельной группе
 //
 //        @Override
-//        public Map<Integer, Group> getGroups() {
+//        public Map<Integer, Category> getGroups() {
 //            return Collections.unmodifiableMap(groups);
 //        }
 //
@@ -110,7 +101,7 @@ public class GoodsService {
 //        }
 //        
 //        @Override
-//        public Group getGroup(int id) {
+//        public Category getGroup(int id) {
 //            return groups.get(id);
 //        }
 //

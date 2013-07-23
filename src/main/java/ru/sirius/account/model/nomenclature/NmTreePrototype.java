@@ -7,17 +7,17 @@ package ru.sirius.account.model.nomenclature;
 
 
 import java.util.Map;
-import ru.sirius.account.model.Article;
-import ru.sirius.account.model.Group;
+import ru.sirius.account.model.entity.Article;
+import ru.sirius.account.model.entity.Category;
 
 //Отсюда идет вся информация об артиклах и группах !!!
 public interface NmTreePrototype {
 
-    public Map<Integer,Group> getGroups();
+    public Map<Integer,Category> getGroups();
 
     public Map<Integer, Article> getArticles();
     
-    public Group getGroup(int id);
+    public Category getGroup(int id);
 
     public Article getArticle(int id);
 

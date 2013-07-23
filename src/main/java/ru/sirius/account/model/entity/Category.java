@@ -1,11 +1,11 @@
-package ru.sirius.account.model;
+package ru.sirius.account.model.entity;
 
-public class Group {
+public class Category {
 
     private int id;
     private int parentId; // для корня 0
-    private String name;           
-    private String comment;
+    private String name;     
+    protected int sortNumber;
 
     public int getId() {
         return id;
@@ -31,13 +31,6 @@ public class Group {
         this.name = name;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 
     @Override
     public String toString(){
@@ -47,14 +40,21 @@ public class Group {
     public boolean hasParent(){
         return parentId != 0;
     }        
+
+    public int getSortNumber() {
+        return sortNumber;
+    }
+
+    public void setSortNumber(int sortNumber) {
+        this.sortNumber = sortNumber;
+    }
     
     @Override
-    public Group clone(){
-        Group group = new Group();
+    public Category clone(){
+        Category group = new Category();
         group.id = this.id;
         group.parentId = this.parentId;
         group.name = this.name;
-        group.comment = this.comment;
         return group;
     }
 }

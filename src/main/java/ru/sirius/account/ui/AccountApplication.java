@@ -1,12 +1,7 @@
 package ru.sirius.account.ui;
 
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JInternalFrame;
-import javax.swing.JInternalFrame.JDesktopIcon;
-import javax.swing.JLabel;
 import ru.sirius.account.ui.goods.MainGoodsPanel;
 
 
@@ -29,7 +24,6 @@ public class AccountApplication extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -105,17 +99,11 @@ public class AccountApplication extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 655, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 392, Short.MAX_VALUE)
         );
 
         pack();
@@ -126,8 +114,22 @@ public class AccountApplication extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void nomenclatureMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomenclatureMenuItemActionPerformed
-        MainGoodsPanel panel = new MainGoodsPanel();
-        jScrollPane1.setViewportView(panel);
+        
+        MainGoodsPanel goodsPanel = new MainGoodsPanel();
+        GroupLayout layout = new GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(goodsPanel, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+                .addContainerGap()));
+        layout.setVerticalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(goodsPanel, GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                .addContainerGap()));
     }//GEN-LAST:event_nomenclatureMenuItemActionPerformed
 
 
@@ -137,7 +139,6 @@ public class AccountApplication extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem nomenclatureMenuItem;
     private javax.swing.JMenuItem openMenuItem;

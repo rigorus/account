@@ -4,8 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import org.apache.log4j.Logger;
-
-
+import ru.sirius.account.utils.Config;
 
 
 public class DbUtils {
@@ -15,9 +14,11 @@ public class DbUtils {
     
     static{
         try {       
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:data/db0001", "dbadmin", "dbadmin");
-            int i = 0;
+            Class.forName(Config.getDbDriverName());
+            connection = DriverManager.getConnection(
+                    Config.getDbUrl(), 
+                    Config.getDbUserLogin(), 
+                    Config.getDbUserPassword());
         } catch (ClassNotFoundException | SQLException ex) {
             logger.fatal(ex);           
         }

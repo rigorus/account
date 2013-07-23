@@ -6,42 +6,61 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
-import ru.sirius.account.model.entity.Goods;
+import ru.sirius.account.model.entity.Category;
+import ru.sirius.account.model.entity.Article;
 
 
 public class GoodsProvider {
     
-    private static final Logger LOGGER = Logger.getLogger(GoodsProvider.class);
-    
-    public static ArrayList<Goods> getGoods(){
+//    private static final Logger LOGGER = Logger.getLogger(GoodsProvider.class);
         
+    public static List<Article> readArticles() throws SQLException{
+                
         Connection connection = DbUtils.getConnection();
 
-        ArrayList<Goods> goods = new ArrayList<>();
-        
+        ArrayList<Article> articles = new ArrayList<>();
+
         try (Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery("SELECT * FROM goods ORDER BY depth_index")) {
+                ResultSet rs = statement.executeQuery("SELECT * FROM goods")) {
 
             while (rs.next()) {
-                Goods article = new Goods();
+                Article article = new Article();
                 article.setId(rs.getInt("goods_id"));
-                article.setParentId(rs.getInt("parent_id"));
-                article.setGroup(rs.getBoolean("is_group"));
+                article.setCategoryId(rs.getInt("category_id"));
                 article.setDeleted(rs.getBoolean("is_deleted"));
                 article.setName(rs.getString("full_name"));
                 article.setShortName(rs.getString("short_name"));
-                article.setBreadthIndex(rs.getInt("breadth_index"));
-                article.setDepthIndex(rs.getInt("depth_index"));
                 article.setDescription(rs.getString("description"));
-                goods.add(article);
+                article.setSortNumber(rs.getInt("sort_number"));
+                articles.add(article);
             }
-            
-            return goods;
 
-        } catch (SQLException ex) {
-            LOGGER.error(ex);
-        }
-        return null;
+            return articles;
+        }        
     }
+    
+    
+    public static List<Category> readCategories() throws SQLException {
+
+        Connection connection = DbUtils.getConnection();
+
+        ArrayList<Category> categories = new ArrayList<>();
+
+        try (Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery("SELECT * FROM category")) {
+
+            while (rs.next()) {
+                Category category = new Category();
+                category.setId(rs.getInt("category_id"));
+                category.setParentId(rs.getInt("parent_id"));
+                category.setName(rs.getString("full_name"));
+                category.setSortNumber(rs.getInt("sort_number"));
+                categories.add(category);
+            }       
+            return categories;
+        }
+
+    }
+    
+    
 }

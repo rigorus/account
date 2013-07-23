@@ -2,18 +2,16 @@ package ru.sirius.account.model.entity;
 
 import java.math.BigDecimal;
 
-public class Goods {
+public class Article {
     
     protected int id;
-    protected int parentId;
-    protected boolean group;
-    protected boolean deleted;
+    protected int categoryId;
     protected String name;
     protected String shortName;
     protected BigDecimal price;
     protected String description;
-    protected int depthIndex;
-    protected int breadthIndex;
+    protected boolean deleted;
+    protected int sortNumber;
 
     public int getId() {
         return id;
@@ -23,20 +21,12 @@ public class Goods {
         this.id = id;
     }
 
-    public int getParentId() {
-        return parentId;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setParentId(int parentId) {
-        this.parentId = parentId;
-    }
-
-    public boolean isGroup() {
-        return group;
-    }
-
-    public void setGroup(boolean group) {
-        this.group = group;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public boolean isDeleted() {
@@ -79,19 +69,11 @@ public class Goods {
         this.description = description;
     }
 
-    public int getDepthIndex() {
-        return depthIndex;
+    public int getSortNumber() {
+        return sortNumber;
     }
 
-    public void setDepthIndex(int depthIndex) {
-        this.depthIndex = depthIndex;
-    }
-
-    public int getBreadthIndex() {
-        return breadthIndex;
-    }
-
-    public void setBreadthIndex(int breadthIndex) {
-        this.breadthIndex = breadthIndex;
+    public void setSortNumber(int sortNumber) {
+        this.sortNumber = sortNumber;
     }
 }
