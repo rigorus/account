@@ -4,6 +4,9 @@
  */
 package ru.sirius.account.ui.goods;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import ru.sirius.account.ui.utils.multispan.AttributiveCellTableModel;
 import ru.sirius.account.ui.utils.multispan.MultiSpanCellTable;
 
@@ -13,11 +16,18 @@ import ru.sirius.account.ui.utils.multispan.MultiSpanCellTable;
  */
 public class MainGoodsPanel extends javax.swing.JPanel {
 
+    private GoodsModelBuilder builder;
     /**
      * Creates new form MainGoodsPanel
      */
     public MainGoodsPanel() {
         initComponents();
+        builder = new GoodsModelBuilder((AttributiveCellTableModel) goodsTable.getModel());
+        try {
+            builder.build();
+        } catch (SQLException ex) {
+            Logger.getLogger(MainGoodsPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }
 
     /**
@@ -33,17 +43,7 @@ public class MainGoodsPanel extends javax.swing.JPanel {
         goodsTable = new MultiSpanCellTable();
         jToggleButton1 = new javax.swing.JToggleButton();
 
-        goodsTable.setModel(new AttributiveCellTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        goodsTable.setModel(new AttributiveCellTableModel());
         goodsTable.setColumnSelectionAllowed(true);
         jScrollPane3.setViewportView(goodsTable);
 

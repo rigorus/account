@@ -197,7 +197,7 @@ public final class DefaultCellAttribute
     public void addColumn() {
         int[][][] oldSpan = span;
         int numRows = oldSpan.length;
-        int numColumns = oldSpan[0].length;
+        int numColumns = numRows != 0 ? oldSpan[0].length : 0;
         span = new int[numRows][numColumns + 1][2];
         System.arraycopy(oldSpan, 0, span, 0, numRows);
         for (int i = 0; i < numRows; i++) {

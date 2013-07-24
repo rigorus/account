@@ -14,14 +14,15 @@ public class GoodsProvider {
     
 //    private static final Logger LOGGER = Logger.getLogger(GoodsProvider.class);
         
-    public static List<Article> readArticles() throws SQLException{
+    public static List<Article> readCategoryArticles(int categoryId) throws SQLException{
                 
         Connection connection = DbUtils.getConnection();
 
         ArrayList<Article> articles = new ArrayList<>();
 
         try (Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery("SELECT * FROM goods")) {
+                ResultSet rs = statement.executeQuery(String.format(
+                        "SELECT * FROM article WHERE category_id = %1$s ORDER BY sort_number" ,categoryId))) {
 
             while (rs.next()) {
                 Article article = new Article();
@@ -40,19 +41,20 @@ public class GoodsProvider {
     }
     
     
-    public static List<Category> readCategories() throws SQLException {
+    
+    
+    public static ArrayList<Category> readCategories() throws SQLException {
 
         Connection connection = DbUtils.getConnection();
 
         ArrayList<Category> categories = new ArrayList<>();
 
         try (Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery("SELECT * FROM category")) {
+                ResultSet rs = statement.executeQuery("SELECT * FROM category ORDER by sort_number")) {
 
             while (rs.next()) {
                 Category category = new Category();
                 category.setId(rs.getInt("category_id"));
-                category.setParentId(rs.getInt("parent_id"));
                 category.setName(rs.getString("full_name"));
                 category.setSortNumber(rs.getInt("sort_number"));
                 categories.add(category);

@@ -24,7 +24,8 @@ public class Config {
     }
     
     public static String getDbUrl(){
-        return module.getProperty("db.url");        
+        return module.getProperty("db.url") + module.getProperty("home.dir") + "/" + 
+        module.getProperty("data.dir.name") + "/" +  module.getProperty("db.name");
     }
     
     public static String getDbUserLogin(){

@@ -15,14 +15,10 @@ create table article(
 
 create table category(
     category_id int not null auto_increment(1,1),
-    parent_id int,
     category_name varchar(400),  
     sort_number int,  
-    constraint category__pk primary key (category_id),
-    constraint category__parent__fk foreign key (category_id) references category(category_id)
+    constraint category__pk primary key (category_id)
 );
-
-insert into category(category_name,sort_number) values('Все наименования',0);
 
 create table template(
     template_id int auto_increment(1,1) primary key,

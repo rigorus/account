@@ -16,7 +16,7 @@ public class DbUtils {
         try {       
             Class.forName(Config.getDbDriverName());
             connection = DriverManager.getConnection(
-                    Config.getDbUrl(), 
+                    Config.getDbUrl(),  
                     Config.getDbUserLogin(), 
                     Config.getDbUserPassword());
         } catch (ClassNotFoundException | SQLException ex) {

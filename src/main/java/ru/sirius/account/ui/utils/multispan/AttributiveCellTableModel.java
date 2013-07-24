@@ -27,7 +27,7 @@ public class AttributiveCellTableModel extends DefaultTableModel {
         setColumnIdentifiers(columnNames);
         dataVector = new Vector();
         setNumRows(numRows);
-        cellAtt = new DefaultCellAttribute(numRows, columnNames.size());
+        cellAtt = new DefaultCellAttribute(numRows, columnNames != null ? columnNames.size() : 0);
     }
 
     public AttributiveCellTableModel(Object[] columnNames, int numRows) {
