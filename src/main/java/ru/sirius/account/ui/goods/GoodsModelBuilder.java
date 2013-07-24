@@ -27,7 +27,8 @@ public class GoodsModelBuilder {
            model.addRow(new Object[]{"", category.getName(),""});
            DefaultCellAttribute attribute = (DefaultCellAttribute) model.getCellAttribute();
            attribute.combine(new int[]{model.getRowCount() - 1}, new int[]{1,2});
-           attribute.setBackground(Color.yellow, new int[]{model.getRowCount() - 1}, new int[]{0,1});
+           attribute.setBackground(Color.YELLOW, new int[]{model.getRowCount() - 1}, new int[]{0,1});
+           attribute.setForeground(Color.BLUE, new int[]{model.getRowCount() - 1}, new int[]{0, 1});
            for( Article article : GoodsProvider.readCategoryArticles(category.getId())){
                model.addRow(new Object[]{article.getId(), article.getName(), "100"});
            }
