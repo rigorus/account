@@ -5,8 +5,10 @@
 package ru.sirius.account.ui.goods;
 
 import java.sql.SQLException;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.netbeans.validation.api.ui.swing.ValidationPanel;
 import ru.sirius.account.ui.utils.multispan.AttributiveCellTableModel;
 import ru.sirius.account.ui.utils.multispan.MultiSpanCellTable;
 
@@ -41,23 +43,23 @@ public class MainGoodsPanel extends javax.swing.JPanel {
 
         jScrollPane3 = new javax.swing.JScrollPane();
         goodsTable = new MultiSpanCellTable();
-        addCategoryButton = new javax.swing.JToggleButton();
-        addArticleButton = new javax.swing.JToggleButton();
+        addCategoryButton = new javax.swing.JButton();
+        addArticleButton = new javax.swing.JButton();
 
         goodsTable.setAutoCreateRowSorter(true);
         goodsTable.setModel(new AttributiveCellTableModel());
-        goodsTable.setColumnSelectionAllowed(true);
         goodsTable.setDoubleBuffered(true);
+        goodsTable.setVerifyInputWhenFocusTarget(false);
         jScrollPane3.setViewportView(goodsTable);
 
-        addCategoryButton.setText("jToggleButton2");
+        addCategoryButton.setText("jButton1");
         addCategoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addCategoryButtonActionPerformed(evt);
             }
         });
 
-        addArticleButton.setText("jToggleButton3");
+        addArticleButton.setText("jButton2");
         addArticleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addArticleButtonActionPerformed(evt);
@@ -68,12 +70,12 @@ public class MainGoodsPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(addCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(addArticleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(addCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addArticleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,16 +89,30 @@ public class MainGoodsPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCategoryButtonActionPerformed
-        // TODO add your handling code here:
+        CreateCategoryPanel panel = new CreateCategoryPanel();
+        ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
+        validationPanel.setInnerComponent(panel);
+        validationPanel.setLocale(new Locale("ru", "RU"));
+        validationPanel.setMinimumSize(validationPanel.getSize());
+        validationPanel.setMaximumSize(validationPanel.getSize());
+        if (validationPanel.showOkCancelDialog("Создание категории")) {
+
+        }
     }//GEN-LAST:event_addCategoryButtonActionPerformed
 
     private void addArticleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addArticleButtonActionPerformed
-        // TODO add your handling code here:
+        CreateArticlePanel panel = new CreateArticlePanel();
+        ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
+        validationPanel.setInnerComponent(panel);
+        validationPanel.setLocale(new Locale("ru", "RU"));
+        if (validationPanel.showOkCancelDialog("Создание артикула")) {
+
+        }
     }//GEN-LAST:event_addArticleButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton addArticleButton;
-    private javax.swing.JToggleButton addCategoryButton;
+    private javax.swing.JButton addArticleButton;
+    private javax.swing.JButton addCategoryButton;
     private javax.swing.JTable goodsTable;
     private javax.swing.JScrollPane jScrollPane3;
     // End of variables declaration//GEN-END:variables
