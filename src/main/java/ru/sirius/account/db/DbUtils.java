@@ -23,7 +23,7 @@ public class DbUtils {
             logger.fatal(ex);           
         }
     }
-    
+       
     public static Connection getConnection(){
         return connection;
     }

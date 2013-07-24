@@ -1,5 +1,6 @@
 package ru.sirius.account.ui.goods;
 
+import java.awt.Color;
 import java.sql.SQLException;
 import ru.sirius.account.db.GoodsProvider;
 import ru.sirius.account.model.entity.Article;
@@ -23,9 +24,10 @@ public class GoodsModelBuilder {
     public void build() throws SQLException{
        for(Category category : GoodsProvider.readCategories() ){
            //рисуем категорию
-           model.addRow(new Object[]{"",category.getName(),""});
+           model.addRow(new Object[]{"", category.getName(),""});
            DefaultCellAttribute attribute = (DefaultCellAttribute) model.getCellAttribute();
-           attribute.combine(new int[]{model.getRowCount() - 1}, new int[]{0,1,2});
+           attribute.combine(new int[]{model.getRowCount() - 1}, new int[]{1,2});
+           attribute.setBackground(Color.yellow, new int[]{model.getRowCount() - 1}, new int[]{0,1});
            for( Article article : GoodsProvider.readCategoryArticles(category.getId())){
                model.addRow(new Object[]{article.getId(), article.getName(), "100"});
            }

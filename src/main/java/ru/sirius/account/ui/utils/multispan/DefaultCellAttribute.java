@@ -17,11 +17,13 @@ public final class DefaultCellAttribute
     protected Font[][] font;                   // CellFont
 
     public DefaultCellAttribute() {
-        this(1, 1);
+        this(0, 0);
     }
 
     public DefaultCellAttribute(int numRows, int numColumns) {
-        setSize(new Dimension(numColumns, numRows));
+        columnSize = numColumns;
+        rowSize = numRows;
+        setSize();
     }
 
     protected void initValue() {
@@ -195,41 +197,48 @@ public final class DefaultCellAttribute
     //
     @Override
     public void addColumn() {
+        if (!increment("column")) {
+            return;
+        }
+
         int[][][] oldSpan = span;
-        int numRows = oldSpan.length;
-        int numColumns = numRows != 0 ? oldSpan[0].length : 0;
-        span = new int[numRows][numColumns + 1][2];
-        System.arraycopy(oldSpan, 0, span, 0, numRows);
-        for (int i = 0; i < numRows; i++) {
-            span[i][numColumns][CellSpan.COLUMN] = 1;
-            span[i][numColumns][CellSpan.ROW] = 1;
+        span = new int[rowSize][columnSize][2];
+        System.arraycopy(oldSpan, 0, span, 0, rowSize);
+        for (int i = 0; i < rowSize; i++) {
+            span[i][columnSize - 1][CellSpan.COLUMN] = 1;
+            span[i][columnSize - 1][CellSpan.ROW] = 1;
         }
     }
 
     @Override
     public void addRow() {
+        if (!increment("row")) {
+            return;
+        }
+
         int[][][] oldSpan = span;
-        int numRows = oldSpan.length;
-        int numColumns = oldSpan[0].length;
-        span = new int[numRows + 1][numColumns][2];
-        System.arraycopy(oldSpan, 0, span, 0, numRows);
-        for (int i = 0; i < numColumns; i++) {
-            span[numRows][i][CellSpan.COLUMN] = 1;
-            span[numRows][i][CellSpan.ROW] = 1;
+        span = new int[rowSize][columnSize][2];
+        System.arraycopy(oldSpan, 0, span, 0, rowSize - 1);
+        for (int i = 0; i < columnSize; i++) {
+            span[rowSize - 1][i][CellSpan.COLUMN] = 1;
+            span[rowSize - 1][i][CellSpan.ROW] = 1;
         }
     }
 
     @Override
     public void insertRow(int row) {
+
+        if( !increment("row")){
+            return;
+        }
+        
         int[][][] oldSpan = span;
-        int numRows = oldSpan.length;
-        int numColumns = oldSpan[0].length;
-        span = new int[numRows + 1][numColumns][2];
+        span = new int[rowSize][columnSize][2];
         if (0 < row) {
             System.arraycopy(oldSpan, 0, span, 0, row - 1);
         }
-        System.arraycopy(oldSpan, 0, span, row, numRows - row);
-        for (int i = 0; i < numColumns; i++) {
+        System.arraycopy(oldSpan, 0, span, row, rowSize - row -1);
+        for (int i = 0; i < columnSize; i++) {
             span[row][i][CellSpan.COLUMN] = 1;
             span[row][i][CellSpan.ROW] = 1;
         }
@@ -240,10 +249,22 @@ public final class DefaultCellAttribute
         return new Dimension(rowSize, columnSize);
     }
 
-    @Override
-    public void setSize(Dimension size) {
-        columnSize = size.width;
-        rowSize = size.height;
+    private boolean increment(String what){
+        
+        switch(what){
+            case "column": ++columnSize; break;
+            case "row": ++rowSize; break;   
+        }
+
+        if (columnSize > 0 || rowSize > 0 && span == null) {
+            setSize();
+        }        
+        return span != null;
+    }
+    
+    public void setSize() {
+        if( columnSize == 0 || rowSize == 0) return;
+        
         span = new int[rowSize][columnSize][2];   // 2: COLUMN,ROW
         foreground = new Color[rowSize][columnSize];
         background = new Color[rowSize][columnSize];

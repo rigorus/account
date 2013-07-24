@@ -43,8 +43,10 @@ public class MainGoodsPanel extends javax.swing.JPanel {
         goodsTable = new MultiSpanCellTable();
         jToggleButton1 = new javax.swing.JToggleButton();
 
+        goodsTable.setAutoCreateRowSorter(true);
         goodsTable.setModel(new AttributiveCellTableModel());
         goodsTable.setColumnSelectionAllowed(true);
+        goodsTable.setDoubleBuffered(true);
         jScrollPane3.setViewportView(goodsTable);
 
         jToggleButton1.setText("jToggleButton1");

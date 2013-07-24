@@ -83,13 +83,12 @@ public class AttributiveCellTableModel extends DefaultTableModel {
 
     @Override
     public void addRow(Vector rowData) {
-        Vector newData = null;
         if (rowData == null) {
-            newData = new Vector(getColumnCount());
+            rowData = new Vector(getColumnCount());
         } else {
             rowData.setSize(getColumnCount());
         }
-        dataVector.addElement(newData);
+        dataVector.addElement(rowData);
 
         //
         cellAtt.addRow();
@@ -119,16 +118,17 @@ public class AttributiveCellTableModel extends DefaultTableModel {
         return cellAtt;
     }
 
-    public void setCellAttribute(CellAttribute newCellAtt) {
-        int numColumns = getColumnCount();
-        int numRows = getRowCount();
-        if ((newCellAtt.getSize().width != numColumns)
-                || (newCellAtt.getSize().height != numRows)) {
-            newCellAtt.setSize(new Dimension(numRows, numColumns));
-        }
-        cellAtt = newCellAtt;
-        fireTableDataChanged();
-    }
+//    public void setCellAttribute(CellAttribute newCellAtt) {
+//        int numColumns = getColumnCount();
+//        int numRows = getRowCount();
+//        if ((newCellAtt.getSize().width != numColumns)
+//                || (newCellAtt.getSize().height != numRows)) {
+//            
+//            newCellAtt.setSize(new Dimension(numRows, numColumns));
+//        }
+//        cellAtt = newCellAtt;
+//        fireTableDataChanged();
+//    }
 
     /*
      public void changeCellAttribute(int row, int column, Object command) {

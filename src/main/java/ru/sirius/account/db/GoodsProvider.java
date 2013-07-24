@@ -55,7 +55,7 @@ public class GoodsProvider {
             while (rs.next()) {
                 Category category = new Category();
                 category.setId(rs.getInt("category_id"));
-                category.setName(rs.getString("full_name"));
+                category.setName(rs.getString("category_name"));
                 category.setSortNumber(rs.getInt("sort_number"));
                 categories.add(category);
             }       
