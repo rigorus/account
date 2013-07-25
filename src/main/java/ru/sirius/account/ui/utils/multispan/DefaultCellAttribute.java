@@ -204,6 +204,15 @@ public final class DefaultCellAttribute
         int[][][] oldSpan = span;
         span = new int[rowSize][columnSize][2];
         System.arraycopy(oldSpan, 0, span, 0, rowSize);
+        Color[][] oldForeground = foreground;
+        foreground = new Color[rowSize][columnSize];
+        System.arraycopy(oldForeground, 0, foreground, 0, rowSize);
+        Color[][] oldBackground = background;
+        background = new Color[rowSize][columnSize];
+        System.arraycopy(oldBackground, 0, background, 0, rowSize );
+        Font[][] oldFont = font;
+        font = new Font[rowSize][columnSize];
+        System.arraycopy(oldFont, 0, font, 0, rowSize);
         for (int i = 0; i < rowSize; i++) {
             span[i][columnSize - 1][CellSpan.COLUMN] = 1;
             span[i][columnSize - 1][CellSpan.ROW] = 1;
@@ -217,8 +226,18 @@ public final class DefaultCellAttribute
         }
 
         int[][][] oldSpan = span;
-        span = new int[rowSize][columnSize][2];
+        span = new int[rowSize][columnSize][2];        
         System.arraycopy(oldSpan, 0, span, 0, rowSize - 1);
+        Color[][] oldForeground = foreground;
+        foreground = new Color[rowSize][columnSize];
+        System.arraycopy(oldForeground, 0, foreground, 0, rowSize - 1);
+        Color[][] oldBackground = background;
+        background = new Color[rowSize][columnSize];
+        System.arraycopy(oldBackground, 0, background, 0, rowSize - 1);
+        Font[][] oldFont = font;
+        font = new Font[rowSize][columnSize];
+        System.arraycopy(oldFont, 0, font, 0, rowSize - 1);
+        
         for (int i = 0; i < columnSize; i++) {
             span[rowSize - 1][i][CellSpan.COLUMN] = 1;
             span[rowSize - 1][i][CellSpan.ROW] = 1;
@@ -234,10 +253,24 @@ public final class DefaultCellAttribute
         
         int[][][] oldSpan = span;
         span = new int[rowSize][columnSize][2];
+        Color[][] oldForeground = foreground;
+        foreground = new Color[rowSize][columnSize];
+        Color[][] oldBackground = background;
+        background = new Color[rowSize][columnSize];
+        Font[][] oldFont = font;
+        font = new Font[rowSize][columnSize];
+        
         if (0 < row) {
             System.arraycopy(oldSpan, 0, span, 0, row - 1);
+            System.arraycopy(oldForeground, 0, foreground, 0, row - 1);
+            System.arraycopy(oldBackground, 0, background, 0, row - 1);
+            System.arraycopy(oldFont, 0, font, 0, row - 1);
         }
         System.arraycopy(oldSpan, 0, span, row, rowSize - row -1);
+        System.arraycopy(oldForeground, 0, foreground, row, rowSize - row - 1);
+        System.arraycopy(oldBackground, 0, background, row, rowSize - row - 1);
+        System.arraycopy(oldFont, 0, font, row, rowSize - row - 1);
+        
         for (int i = 0; i < columnSize; i++) {
             span[row][i][CellSpan.COLUMN] = 1;
             span[row][i][CellSpan.ROW] = 1;
@@ -256,7 +289,7 @@ public final class DefaultCellAttribute
             case "row": ++rowSize; break;   
         }
 
-        if (columnSize > 0 || rowSize > 0 && span == null) {
+        if (columnSize > 0 && rowSize > 0 && span == null) {
             setSize();
         }        
         return span != null;

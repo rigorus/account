@@ -5,10 +5,10 @@
 package ru.sirius.account.ui.goods;
 
 import java.sql.SQLException;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.netbeans.validation.api.ui.swing.ValidationPanel;
+import org.openide.util.Exceptions;
 import ru.sirius.account.ui.utils.multispan.AttributiveCellTableModel;
 import ru.sirius.account.ui.utils.multispan.MultiSpanCellTable;
 
@@ -24,8 +24,8 @@ public class MainGoodsPanel extends javax.swing.JPanel {
      */
     public MainGoodsPanel() {
         initComponents();
-        builder = new GoodsModelBuilder((AttributiveCellTableModel) goodsTable.getModel());
         try {
+            builder = new GoodsModelBuilder((AttributiveCellTableModel) goodsTable.getModel());
             builder.build();
         } catch (SQLException ex) {
             Logger.getLogger(MainGoodsPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -45,10 +45,16 @@ public class MainGoodsPanel extends javax.swing.JPanel {
         goodsTable = new MultiSpanCellTable();
         addCategoryButton = new javax.swing.JButton();
         addArticleButton = new javax.swing.JButton();
+        editButton = new javax.swing.JButton();
+        upButton = new javax.swing.JButton();
+        downButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
 
-        goodsTable.setAutoCreateRowSorter(true);
         goodsTable.setModel(new AttributiveCellTableModel());
+        goodsTable.setColumnSelectionAllowed(false);
         goodsTable.setDoubleBuffered(true);
+        goodsTable.setFocusable(false);
+        goodsTable.setUpdateSelectionOnSort(false);
         goodsTable.setVerifyInputWhenFocusTarget(false);
         jScrollPane3.setViewportView(goodsTable);
 
@@ -66,6 +72,14 @@ public class MainGoodsPanel extends javax.swing.JPanel {
             }
         });
 
+        editButton.setText("jButton1");
+
+        upButton.setText("jButton1");
+
+        downButton.setText("jButton1");
+
+        deleteButton.setText("jButton1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -74,7 +88,15 @@ public class MainGoodsPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(addCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(addArticleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(addArticleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69)
+                .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(upButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(downButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -82,7 +104,11 @@ public class MainGoodsPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addCategoryButton)
-                    .addComponent(addArticleButton))
+                    .addComponent(addArticleButton)
+                    .addComponent(editButton)
+                    .addComponent(upButton)
+                    .addComponent(downButton)
+                    .addComponent(deleteButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
         );
@@ -92,28 +118,36 @@ public class MainGoodsPanel extends javax.swing.JPanel {
         CreateCategoryPanel panel = new CreateCategoryPanel();
         ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
         validationPanel.setInnerComponent(panel);
-        validationPanel.setLocale(new Locale("ru", "RU"));
-        validationPanel.setMinimumSize(validationPanel.getSize());
-        validationPanel.setMaximumSize(validationPanel.getSize());
         if (validationPanel.showOkCancelDialog("Создание категории")) {
-
+            try {
+                builder.addCategory(panel.getCategory());
+            } catch (SQLException ex) {
+                Exceptions.printStackTrace(ex);
+            }
         }
     }//GEN-LAST:event_addCategoryButtonActionPerformed
 
     private void addArticleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addArticleButtonActionPerformed
-        CreateArticlePanel panel = new CreateArticlePanel();
-        ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
-        validationPanel.setInnerComponent(panel);
-        validationPanel.setLocale(new Locale("ru", "RU"));
-        if (validationPanel.showOkCancelDialog("Создание артикула")) {
-
+        try {
+            CreateArticlePanel panel = new CreateArticlePanel();
+            ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
+            validationPanel.setInnerComponent(panel);
+            if (validationPanel.showOkCancelDialog("Создание артикула")) {
+                    builder.addArticle(panel.getArticle());
+            }
+        } catch (SQLException ex) {
+            Exceptions.printStackTrace(ex);
         }
     }//GEN-LAST:event_addArticleButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addArticleButton;
     private javax.swing.JButton addCategoryButton;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JButton downButton;
+    private javax.swing.JButton editButton;
     private javax.swing.JTable goodsTable;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JButton upButton;
     // End of variables declaration//GEN-END:variables
 }

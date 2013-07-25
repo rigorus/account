@@ -1,6 +1,7 @@
 package ru.sirius.account.utils;
 
 import java.io.IOException;
+import java.math.MathContext;
 import java.util.Properties;
 import org.apache.log4j.Logger;
 
@@ -36,4 +37,5 @@ public class Config {
         return module.getProperty("db.user.password");
     }
     
+    public static MathContext currencyContext = new MathContext(2);    
 }

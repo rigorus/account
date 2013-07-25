@@ -1,0 +1,9 @@
+home.dir=/G:/Projects/account
+data.dir.name=data
+
+db.driver.name=org.h2.Driver
+
+db.url=jdbc:h2:tcp://localhost/
+db.name=db0002
+db.user.login=account
+db.user.password=account
