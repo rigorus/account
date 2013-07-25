@@ -261,15 +261,15 @@ public final class DefaultCellAttribute
         font = new Font[rowSize][columnSize];
         
         if (0 < row) {
-            System.arraycopy(oldSpan, 0, span, 0, row - 1);
-            System.arraycopy(oldForeground, 0, foreground, 0, row - 1);
-            System.arraycopy(oldBackground, 0, background, 0, row - 1);
-            System.arraycopy(oldFont, 0, font, 0, row - 1);
+            System.arraycopy(oldSpan, 0, span, 0, row );
+            System.arraycopy(oldForeground, 0, foreground, 0, row );
+            System.arraycopy(oldBackground, 0, background, 0, row );
+            System.arraycopy(oldFont, 0, font, 0, row );
         }
-        System.arraycopy(oldSpan, 0, span, row, rowSize - row -1);
-        System.arraycopy(oldForeground, 0, foreground, row, rowSize - row - 1);
-        System.arraycopy(oldBackground, 0, background, row, rowSize - row - 1);
-        System.arraycopy(oldFont, 0, font, row, rowSize - row - 1);
+        System.arraycopy(oldSpan, row, span, row + 1 , rowSize - row - 1);
+        System.arraycopy(oldForeground, row, foreground, row + 1, rowSize - row - 1);
+        System.arraycopy(oldBackground, row, background, row + 1, rowSize - row - 1);
+        System.arraycopy(oldFont, row, font, row + 1, rowSize - row - 1);
         
         for (int i = 0; i < columnSize; i++) {
             span[row][i][CellSpan.COLUMN] = 1;

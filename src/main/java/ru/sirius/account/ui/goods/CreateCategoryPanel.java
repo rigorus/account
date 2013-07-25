@@ -19,7 +19,6 @@ public class CreateCategoryPanel extends javax.swing.JPanel {
     public CreateCategoryPanel() {
                 
         initComponents();                            
-        validationGroup.add(sortNumberTextField, StringValidators.REQUIRE_VALID_INTEGER);
         validationGroup.add(groupNameTextField, StringValidators.REQUIRE_NON_EMPTY_STRING);
     }
 
@@ -30,7 +29,6 @@ public class CreateCategoryPanel extends javax.swing.JPanel {
     
     public Category getCategory(){         
         category.setName(groupNameTextField.getText());
-        category.setSortNumber(Integer.parseInt(sortNumberTextField.getText()));
         return category;
     }
     
@@ -45,17 +43,10 @@ public class CreateCategoryPanel extends javax.swing.JPanel {
 
         groupNameTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        sortNumberTextField = new javax.swing.JTextField();
 
         groupNameTextField.setName("Наименование"); // NOI18N
 
         jLabel3.setText("Наименование");
-
-        jLabel1.setText("Позиция");
-
-        sortNumberTextField.setToolTipText("");
-        sortNumberTextField.setName("Позиция"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -63,13 +54,9 @@ public class CreateCategoryPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(groupNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
-                    .addComponent(sortNumberTextField))
+                .addComponent(groupNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -79,17 +66,11 @@ public class CreateCategoryPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(groupNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(sortNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField groupNameTextField;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField sortNumberTextField;
     // End of variables declaration//GEN-END:variables
 }

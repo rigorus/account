@@ -13,6 +13,7 @@ import ru.sirius.account.model.entity.Category;
 import ru.sirius.account.ui.utils.multispan.AttributiveCellTableModel;
 import ru.sirius.account.ui.utils.multispan.DefaultCellAttribute;
 
+// TODO index пересчитываются каждый раз при удалении и перемещении !!!! 
 public class GoodsModelBuilder {
     
     private AttributiveCellTableModel model;
@@ -48,20 +49,26 @@ public class GoodsModelBuilder {
     }
     
     public void addCategory(Category category) throws SQLException{
-        category.setSortNumber(categories.size() * 1000);        
+        category.setWeight((categories.size() + 1) * 1000);                
         GoodsProvider.createCategory(category);
         categories.add(category);
-        addCategoryRow(category);
+        articles.put(category.getId(), new ArrayList<Article>());
+        int position = getPosition(category.getId());
+        insertCategoryRow(position, category);
     }
     
     public void addArticle(Article article) throws SQLException{
-        Category category = findCategory(article.getCategoryId());
-        ArrayList<Article> list = articles.get(category.getId());
-        int sortNumber = category.getSortNumber() + list.size() + 1;
-        article.setSortNumber(sortNumber);
+        int categoryId = article.getCategoryId();
+        Category category = findCategory(categoryId);
+        ArrayList<Article> list = articles.get(categoryId);
+        int weight = category.getWeight() + list.size() + 1;
+        article.setWeight(weight);
+        
         GoodsProvider.createArticle(article);
+        
         list.add(article);
-        addArticleRow(article);
+        int position = getPosition(category.getId()) + list.size();
+        insertArticleRow(position, article);
     }
     
     private void addCategoryRow(Category category){
@@ -73,9 +80,22 @@ public class GoodsModelBuilder {
         attribute.setFont(font, model.getRowCount() - 1, 1);
     }
     
+    private void insertCategoryRow(int position, Category category) {
+                
+        model.insertRow(position, new Object[]{"", category.getName(), ""});
+        attribute.combine(new int[]{model.getRowCount() - 1}, new int[]{1, 2});
+        attribute.setBackground(Color.YELLOW, new int[]{model.getRowCount() - 1}, new int[]{0, 1});
+        attribute.setForeground(Color.BLUE, new int[]{model.getRowCount() - 1}, new int[]{0, 1});
+        Font font = new Font(Font.SANS_SERIF, Font.BOLD, 12);
+        attribute.setFont(font, model.getRowCount() - 1, 1);
+    }
+    
     private void addArticleRow(Article article) {
-//        model.insertRow(row, rowData);
         model.addRow(new Object[]{article.getId(), article.getName(), "100"});
+    }
+    
+    private void insertArticleRow(int position, Article article) {
+        model.insertRow(position, new Object[]{article.getId(), article.getName(), "100"});
     }
     
     private Category findCategory(int id){
@@ -85,5 +105,18 @@ public class GoodsModelBuilder {
             }
         }
         return null;
+    }
+    
+    private int getPosition(int id){
+        int position = 0;
+        for (Category category : categories) {
+            if (category.getId() == id) {
+                return position;
+            }else{
+                position += 1 + articles.get(category.getId()).size();
+            }
+        }   
+        
+        return position;
     }
 }

@@ -18,7 +18,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="jScrollPane3" pref="472" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
-              <Component id="addCategoryButton" min="-2" pref="29" max="-2" attributes="0"/>
+              <Component id="addCategoryButton" min="-2" pref="26" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="addArticleButton" min="-2" pref="26" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
@@ -37,15 +37,15 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="addCategoryButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="addArticleButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="editButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="upButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="downButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="deleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="addCategoryButton" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
+                  <Component id="addArticleButton" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
+                  <Component id="editButton" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
+                  <Component id="upButton" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
+                  <Component id="downButton" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
+                  <Component id="deleteButton" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane3" pref="169" max="32767" attributes="0"/>
+              <Component id="jScrollPane3" pref="172" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -87,7 +87,6 @@
                 </Column>
               </TableColumnModel>
             </Property>
-            <Property name="columnSelectionAllowed" type="boolean" value="false"/>
             <Property name="doubleBuffered" type="boolean" value="true"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
@@ -104,7 +103,12 @@
     </Container>
     <Component class="javax.swing.JButton" name="addCategoryButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jButton1"/>
+        <Property name="toolTipText" type="java.lang.String" value="&#x421;&#x43e;&#x437;&#x434;&#x430;&#x442;&#x44c; &#x43a;&#x430;&#x442;&#x435;&#x433;&#x43e;&#x440;&#x438;&#x44e;"/>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.CompoundBorderInfo">
+            <CompoundBorder/>
+          </Border>
+        </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addCategoryButtonActionPerformed"/>
@@ -112,7 +116,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="addArticleButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jButton2"/>
+        <Property name="toolTipText" type="java.lang.String" value="&#x421;&#x43e;&#x437;&#x434;&#x430;&#x442;&#x44c; &#x430;&#x440;&#x442;&#x438;&#x43a;&#x443;&#x43b;"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addArticleButtonActionPerformed"/>
@@ -120,23 +124,36 @@
     </Component>
     <Component class="javax.swing.JButton" name="editButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jButton1"/>
+        <Property name="toolTipText" type="java.lang.String" value="&#x420;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="upButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jButton1"/>
+        <Property name="toolTipText" type="java.lang.String" value="&#x412;&#x432;&#x435;&#x440;&#x445;"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="upButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="downButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jButton1"/>
+        <Property name="toolTipText" type="java.lang.String" value="&#x412;&#x43d;&#x438;&#x437;"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="downButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="deleteButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jButton1"/>
+        <Property name="toolTipText" type="java.lang.String" value="&#x423;&#x434;&#x430;&#x43b;&#x438;&#x442;&#x44c;"/>
+        <Property name="rolloverEnabled" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

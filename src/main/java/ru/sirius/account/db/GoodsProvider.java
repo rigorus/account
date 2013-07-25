@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 import ru.sirius.account.model.entity.Category;
 import ru.sirius.account.model.entity.Article;
 
@@ -23,7 +22,7 @@ public class GoodsProvider {
 
         try (Statement statement = connection.createStatement();
                 ResultSet rs = statement.executeQuery(String.format(
-                        "SELECT * FROM article WHERE category_id = %1$s ORDER BY sort_number" ,categoryId))) {
+                        "SELECT * FROM article WHERE category_id = %1$s ORDER BY weight" ,categoryId))) {
 
             while (rs.next()) {
                 Article article = new Article();
@@ -34,7 +33,7 @@ public class GoodsProvider {
                 article.setShortName(rs.getString("short_name"));
                 article.setDescription(rs.getString("description"));
                 article.setPrice(rs.getBigDecimal("price"));
-                article.setSortNumber(rs.getInt("sort_number"));
+                article.setWeight(rs.getInt("weight"));
                 articles.add(article);
             }
 
@@ -49,13 +48,13 @@ public class GoodsProvider {
         ArrayList<Category> categories = new ArrayList<>();
 
         try (Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery("SELECT * FROM category ORDER by sort_number")) {
+                ResultSet rs = statement.executeQuery("SELECT * FROM category ORDER by weight")) {
 
             while (rs.next()) {
                 Category category = new Category();
                 category.setId(rs.getInt("category_id"));
                 category.setName(rs.getString("category_name"));
-                category.setSortNumber(rs.getInt("sort_number"));
+                category.setWeight(rs.getInt("weight"));
                 categories.add(category);
             }       
             return categories;
@@ -65,11 +64,13 @@ public class GoodsProvider {
     public static void createCategory(Category category) throws SQLException{
         
         Connection connection = DbUtils.getConnection();
-        String sql = "INSERT INTO category(category_name, sort_number) VALUES(?,?)";
+        category.setId(getNextValue());
+        String sql = "INSERT INTO category(category_id, category_name, weight) VALUES(?,?,?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, category.getName());
-            statement.setInt(2, category.getSortNumber());
+            statement.setInt(1, category.getId());
+            statement.setString(2, category.getName());
+            statement.setInt(3, category.getWeight());
             statement.executeUpdate();
         }
     }
@@ -77,18 +78,34 @@ public class GoodsProvider {
     public static void createArticle(Article article) throws SQLException {
 
         Connection connection = DbUtils.getConnection();
-        String sql = "INSERT INTO article(category_id, full_name, short_name, price, description, sort_number)"
-                + " VALUES(?,?,?,?,?,?)";
+        article.setId(getNextValue());
+        String sql = "INSERT INTO article(article_id, category_id, full_name, short_name, price, description, weight)"
+                + " VALUES(?,?,?,?,?,?,?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, article.getCategoryId());
-            statement.setString(2, article.getName());
-            statement.setString(3, article.getShortName());
-            statement.setBigDecimal(4, article.getPrice());
-            statement.setString(5, article.getDescription());
-            statement.setInt(6,article.getSortNumber());
+            statement.setInt(1,article.getId());
+            statement.setInt(2, article.getCategoryId());
+            statement.setString(3, article.getName());
+            statement.setString(4, article.getShortName());
+            statement.setBigDecimal(5, article.getPrice());
+            statement.setString(6, article.getDescription());
+            statement.setInt(7,article.getWeight());
             statement.executeUpdate();
         }
+    }
+    
+    public static int getNextValue() throws SQLException{
+        Connection connection = DbUtils.getConnection();
+
+        try (Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery("SELECT NEXTVAL('seq_id')")) {
+
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        
+        throw new SQLException("Error in next sequence value");
     }
     
 }

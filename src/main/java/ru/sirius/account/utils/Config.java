@@ -37,5 +37,5 @@ public class Config {
         return module.getProperty("db.user.password");
     }
     
-    public static MathContext currencyContext = new MathContext(2);    
+    public static int currencyScale = 2;
 }

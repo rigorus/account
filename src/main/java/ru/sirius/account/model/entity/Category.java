@@ -4,7 +4,7 @@ public class Category {
 
     private int id;
     private String name;     
-    protected int sortNumber;
+    protected int weight;
 
     public int getId() {
         return id;
@@ -22,25 +22,16 @@ public class Category {
         this.name = name;
     }
 
-
-    @Override
-    public String toString(){
-        return name;
-    }         
-
-    public int getSortNumber() {
-        return sortNumber;
+    public int getWeight() {
+        return weight;
     }
 
-    public void setSortNumber(int sortNumber) {
-        this.sortNumber = sortNumber;
+    public void setWeight(int weight) {
+        this.weight = weight;
     }
     
     @Override
-    public Category clone(){
-        Category group = new Category();
-        group.id = this.id;
-        group.name = this.name;
-        return group;
+    public String toString() {
+        return name;
     }
 }

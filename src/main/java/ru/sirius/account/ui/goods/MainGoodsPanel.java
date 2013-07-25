@@ -7,6 +7,7 @@ package ru.sirius.account.ui.goods;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import org.netbeans.validation.api.ui.swing.ValidationPanel;
 import org.openide.util.Exceptions;
 import ru.sirius.account.ui.utils.multispan.AttributiveCellTableModel;
@@ -24,6 +25,9 @@ public class MainGoodsPanel extends javax.swing.JPanel {
      */
     public MainGoodsPanel() {
         initComponents();
+        addCategoryButton.setIcon(new ImageIcon(this.getClass().getResource("add_category.png")));
+        addArticleButton.setIcon(new ImageIcon(this.getClass().getResource("add_article.png")));
+        deleteButton.setIcon(new ImageIcon(this.getClass().getResource("delete.png")));
         try {
             builder = new GoodsModelBuilder((AttributiveCellTableModel) goodsTable.getModel());
             builder.build();
@@ -51,34 +55,55 @@ public class MainGoodsPanel extends javax.swing.JPanel {
         deleteButton = new javax.swing.JButton();
 
         goodsTable.setModel(new AttributiveCellTableModel());
-        goodsTable.setColumnSelectionAllowed(false);
         goodsTable.setDoubleBuffered(true);
         goodsTable.setFocusable(false);
         goodsTable.setUpdateSelectionOnSort(false);
         goodsTable.setVerifyInputWhenFocusTarget(false);
         jScrollPane3.setViewportView(goodsTable);
 
-        addCategoryButton.setText("jButton1");
+        addCategoryButton.setToolTipText("Создать категорию");
+        addCategoryButton.setBorder(javax.swing.BorderFactory.createCompoundBorder());
         addCategoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addCategoryButtonActionPerformed(evt);
             }
         });
 
-        addArticleButton.setText("jButton2");
+        addArticleButton.setToolTipText("Создать артикул");
         addArticleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addArticleButtonActionPerformed(evt);
             }
         });
 
-        editButton.setText("jButton1");
+        editButton.setToolTipText("Редактировать");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
 
-        upButton.setText("jButton1");
+        upButton.setToolTipText("Вверх");
+        upButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                upButtonActionPerformed(evt);
+            }
+        });
 
-        downButton.setText("jButton1");
+        downButton.setToolTipText("Вниз");
+        downButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downButtonActionPerformed(evt);
+            }
+        });
 
-        deleteButton.setText("jButton1");
+        deleteButton.setToolTipText("Удалить");
+        deleteButton.setRolloverEnabled(false);
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -86,7 +111,7 @@ public class MainGoodsPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(addCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(addCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(addArticleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(69, 69, 69)
@@ -103,14 +128,14 @@ public class MainGoodsPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addCategoryButton)
-                    .addComponent(addArticleButton)
-                    .addComponent(editButton)
-                    .addComponent(upButton)
-                    .addComponent(downButton)
-                    .addComponent(deleteButton))
+                    .addComponent(addCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addArticleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(upButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(downButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -139,6 +164,26 @@ public class MainGoodsPanel extends javax.swing.JPanel {
             Exceptions.printStackTrace(ex);
         }
     }//GEN-LAST:event_addArticleButtonActionPerformed
+
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+        int position = goodsTable.getSelectedRow();
+        if( position == -1) return;
+        
+        
+        
+    }//GEN-LAST:event_editButtonActionPerformed
+
+    private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_upButtonActionPerformed
+
+    private void downButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_downButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addArticleButton;
