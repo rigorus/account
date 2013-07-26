@@ -1,6 +1,5 @@
 package ru.sirius.account.ui.utils.multispan;
 
-import java.awt.Dimension;
 import java.util.Enumeration;
 import java.util.Vector;
 import javax.swing.event.TableModelEvent;
@@ -8,7 +7,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class AttributiveCellTableModel extends DefaultTableModel {
 
-    protected CellAttribute cellAtt;
+    protected CellAttribute attributiveModel;
 
     public AttributiveCellTableModel() {
         this((Vector) null, 0);
@@ -20,14 +19,14 @@ public class AttributiveCellTableModel extends DefaultTableModel {
         setColumnIdentifiers(names);
         dataVector = new Vector();
         setNumRows(numRows);
-        cellAtt = new DefaultCellAttribute(numRows, numColumns);
+        attributiveModel = new DefaultCellAttribute(numRows, numColumns);
     }
 
     public AttributiveCellTableModel(Vector columnNames, int numRows) {
         setColumnIdentifiers(columnNames);
         dataVector = new Vector();
         setNumRows(numRows);
-        cellAtt = new DefaultCellAttribute(numRows, columnNames != null ? columnNames.size() : 0);
+        attributiveModel = new DefaultCellAttribute(numRows, columnNames != null ? columnNames.size() : 0);
     }
 
     public AttributiveCellTableModel(Object[] columnNames, int numRows) {
@@ -50,7 +49,7 @@ public class AttributiveCellTableModel extends DefaultTableModel {
         
         super.setDataVector(dataVector, columnNames);
         dataVector = newData;
-        cellAtt = new DefaultCellAttribute(dataVector.size(), columnIdentifiers.size());
+        attributiveModel = new DefaultCellAttribute(dataVector.size(), columnIdentifiers.size());
 
         newRowsAdded(new TableModelEvent(this, 0, getRowCount() - 1,
                 TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
@@ -76,7 +75,7 @@ public class AttributiveCellTableModel extends DefaultTableModel {
         }
 
         //
-        cellAtt.addColumn();
+        attributiveModel.addColumn();
 
         fireTableStructureChanged();
     }
@@ -91,7 +90,7 @@ public class AttributiveCellTableModel extends DefaultTableModel {
         dataVector.addElement(rowData);
 
         //
-        cellAtt.addRow();
+        attributiveModel.addRow();
 
         newRowsAdded(new TableModelEvent(this, getRowCount() - 1, getRowCount() - 1,
                 TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
@@ -108,14 +107,20 @@ public class AttributiveCellTableModel extends DefaultTableModel {
         dataVector.insertElementAt(rowData, row);
 
         //
-        cellAtt.insertRow(row);
+        attributiveModel.insertRow(row);
 
         newRowsAdded(new TableModelEvent(this, row, row,
                 TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
     }
 
+    @Override
+    public void moveRow(int start, int end, int to) {
+        attributiveModel.moveRow(start, end, to);
+        super.moveRow(start, end, to);
+    }
+    
     public CellAttribute getCellAttribute() {
-        return cellAtt;
+        return attributiveModel;
     }
 
 //    public void setCellAttribute(CellAttribute newCellAtt) {

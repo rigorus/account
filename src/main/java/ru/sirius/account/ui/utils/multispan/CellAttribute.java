@@ -13,4 +13,6 @@ public interface CellAttribute {
     public Dimension getSize();
 
 //    public void setSize(Dimension size);
+
+    public void moveRow(int start, int end, int to);
 }

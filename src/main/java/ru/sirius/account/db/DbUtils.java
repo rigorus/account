@@ -19,6 +19,7 @@ public class DbUtils {
                     Config.getDbUrl(),  
                     Config.getDbUserLogin(), 
                     Config.getDbUserPassword());
+            connection.setAutoCommit(false);
         } catch (ClassNotFoundException | SQLException ex) {
             logger.fatal(ex);           
         }

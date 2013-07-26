@@ -72,7 +72,8 @@ public class GoodsProvider {
             statement.setString(2, category.getName());
             statement.setInt(3, category.getWeight());
             statement.executeUpdate();
-        }
+        }        
+        connection.commit();
     }
     
     public static void createArticle(Article article) throws SQLException {
@@ -92,6 +93,7 @@ public class GoodsProvider {
             statement.setInt(7,article.getWeight());
             statement.executeUpdate();
         }
+        connection.commit();
     }
     
     public static int getNextValue() throws SQLException{
@@ -106,6 +108,51 @@ public class GoodsProvider {
         }
         
         throw new SQLException("Error in next sequence value");
+    }
+
+    public static void replace(Category a, Category b) throws SQLException {
+        Connection connection = DbUtils.getConnection();
+//TODO для еще всех артикулов нужно сделать !!!
+        String sql = "UPDATE category SET weight = ? WHERE category_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {                
+            
+            int weight = a.getWeight();
+            a.setWeight(b.getWeight());
+            b.setWeight(weight);
+                       
+            statement.setInt(a.getWeight(), a.getId());
+            statement.executeUpdate();
+            statement.setInt(b.getWeight(), b.getId());
+            statement.executeUpdate();
+            connection.commit();
+            
+        }catch(SQLException ex){
+            connection.rollback();
+            throw ex;
+        }
+        
+    }
+
+    public static void replace(Article a, Article b) throws SQLException {
+        Connection connection = DbUtils.getConnection();
+
+        String sql = "UPDATE article SET weight = ? WHERE category_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            int weight = a.getWeight();
+            a.setWeight(b.getWeight());
+            b.setWeight(weight);
+
+            statement.setInt(a.getWeight(), a.getId());
+            statement.executeUpdate();
+            statement.setInt(b.getWeight(), b.getId());
+            statement.executeUpdate();
+            connection.commit();
+
+        } catch (SQLException ex) {
+            connection.rollback();
+            throw ex;
+        }
     }
     
 }

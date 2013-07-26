@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import ru.sirius.account.db.GoodsProvider;
@@ -71,6 +70,51 @@ public class GoodsModelBuilder {
         insertArticleRow(position, article);
     }
     
+    public void change(int position, boolean up) throws SQLException{
+        if( categories.isEmpty()) return;
+        int index = 0;        
+        int cIndex = 0;
+        int aIndex = 0;
+        Category category = null;
+        Article article = null;
+        for (Category c : categories) {
+            aIndex = 0;
+            if( index++ == position){
+                category = c;
+                break;
+            }            
+            ++cIndex;
+            for (Article a : articles.get(category.getId())) {
+                if (index++ == position) {
+                    article = a;
+                    break;
+                }
+                ++aIndex;
+            }
+        }  
+        
+        if( category != null && ((cIndex > 0 && up) || (cIndex < categories.size() - 1 && !up) )){
+            if( up ){                
+                GoodsProvider.replace(category, categories.get(cIndex - 1));
+            }else{
+                GoodsProvider.replace(category, categories.get(cIndex + 1));
+            }
+        } else if (article != null && ((aIndex > 0 && up) || (aIndex < articles.size() - 1 && !up))) {
+            if (up) {
+                GoodsProvider.replace(article, articles.get(cIndex - 1).get(aIndex -1));
+            } else {
+                GoodsProvider.replace(article, articles.get(cIndex - 1).get(aIndex + 1));
+            }
+        }
+        
+    }
+    
+    private void replace(){
+        
+    }
+    
+    
+    
     private void addCategoryRow(Category category){
         model.addRow(new Object[]{"", category.getName(), ""});
         attribute.combine(new int[]{model.getRowCount() - 1}, new int[]{1, 2});
@@ -80,8 +124,7 @@ public class GoodsModelBuilder {
         attribute.setFont(font, model.getRowCount() - 1, 1);
     }
     
-    private void insertCategoryRow(int position, Category category) {
-                
+    private void insertCategoryRow(int position, Category category) {                
         model.insertRow(position, new Object[]{"", category.getName(), ""});
         attribute.combine(new int[]{model.getRowCount() - 1}, new int[]{1, 2});
         attribute.setBackground(Color.YELLOW, new int[]{model.getRowCount() - 1}, new int[]{0, 1});
