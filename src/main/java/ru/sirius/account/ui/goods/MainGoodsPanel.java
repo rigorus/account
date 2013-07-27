@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ru.sirius.account.ui.goods;
 
 import java.sql.SQLException;
@@ -55,7 +51,6 @@ public class MainGoodsPanel extends javax.swing.JPanel {
         deleteButton = new javax.swing.JButton();
 
         goodsTable.setModel(new AttributiveCellTableModel());
-        goodsTable.setDoubleBuffered(true);
         goodsTable.setFocusable(false);
         goodsTable.setUpdateSelectionOnSort(false);
         goodsTable.setVerifyInputWhenFocusTarget(false);
@@ -167,18 +162,35 @@ public class MainGoodsPanel extends javax.swing.JPanel {
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
         int position = goodsTable.getSelectedRow();
-        if( position == -1) return;
-        
-        
+        if( position == -1){
+            return;
+        }
+//        builder.change(position, );
         
     }//GEN-LAST:event_editButtonActionPerformed
 
     private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
-        // TODO add your handling code here:
+        try {
+            int position = goodsTable.getSelectedRow();
+            if (position == -1) {
+                return;
+            }
+            builder.move(position,true);        
+        } catch (SQLException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }//GEN-LAST:event_upButtonActionPerformed
 
     private void downButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downButtonActionPerformed
-        // TODO add your handling code here:
+        try {
+            int position = goodsTable.getSelectedRow();
+            if (position == -1) {
+                return;
+            }
+            builder.move(position,false);
+        } catch (SQLException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }//GEN-LAST:event_downButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed

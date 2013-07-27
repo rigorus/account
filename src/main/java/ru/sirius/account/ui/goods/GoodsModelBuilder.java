@@ -70,50 +70,57 @@ public class GoodsModelBuilder {
         insertArticleRow(position, article);
     }
     
-    public void change(int position, boolean up) throws SQLException{
-        if( categories.isEmpty()) return;
+    public void move(int position, boolean up) throws SQLException{
         int index = 0;        
         int cIndex = 0;
         int aIndex = 0;
         Category category = null;
         Article article = null;
-        for (Category c : categories) {
+        category: for (Category c : categories) {
             aIndex = 0;
             if( index++ == position){
                 category = c;
                 break;
-            }            
-            ++cIndex;
-            for (Article a : articles.get(category.getId())) {
+            }                        
+            for (Article a : articles.get(c.getId())) {
                 if (index++ == position) {
                     article = a;
-                    break;
+                    break category;
                 }
                 ++aIndex;
             }
+            ++cIndex;
         }  
         
-        if( category != null && ((cIndex > 0 && up) || (cIndex < categories.size() - 1 && !up) )){
-            if( up ){                
-                GoodsProvider.replace(category, categories.get(cIndex - 1));
-            }else{
-                GoodsProvider.replace(category, categories.get(cIndex + 1));
-            }
-        } else if (article != null && ((aIndex > 0 && up) || (aIndex < articles.size() - 1 && !up))) {
-            if (up) {
-                GoodsProvider.replace(article, articles.get(cIndex - 1).get(aIndex -1));
-            } else {
-                GoodsProvider.replace(article, articles.get(cIndex - 1).get(aIndex + 1));
-            }
-        }
+        if( category != null && up && cIndex > 0 ) {
         
-    }
-    
-    private void replace(){
+            GoodsProvider.replace(category, categories.get(cIndex - 1));
+            int end = position + articles.get(category.getId()).size();
+            int to = position - articles.get(categories.get(cIndex - 1).getId()).size() -1;
+            model.moveRow(position, end, to);
+            attribute.moveRow(position, end, to);
         
-    }
-    
-    
+        }else if ( category != null && !up && cIndex < categories.size() - 1){
+
+            GoodsProvider.replace(category, categories.get(cIndex + 1));
+            int length = articles.get(category.getId()).size();
+            model.moveRow(position, position + length, position + length + 1);
+            attribute.moveRow(position, position + length, position + length + 1);
+        
+        } else if (article != null && up && aIndex > 0 ){
+        
+            GoodsProvider.replace(article, articles.get(categories.get(cIndex).getId()).get(aIndex - 1));
+            model.moveRow(position, position, position - 1);
+            attribute.moveRow(position, position, position - 1);
+            
+        }else if (article != null && !up && aIndex < articles.get(categories.get(cIndex).getId()).size() - 1){
+            
+            GoodsProvider.replace(article, articles.get(categories.get(cIndex).getId()).get(aIndex + 1));
+            model.moveRow(position, position, position + 1);
+            attribute.moveRow(position, position, position + 1);
+        
+        }           
+    }            
     
     private void addCategoryRow(Category category){
         model.addRow(new Object[]{"", category.getName(), ""});

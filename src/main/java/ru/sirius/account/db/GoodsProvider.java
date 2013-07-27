@@ -120,9 +120,12 @@ public class GoodsProvider {
             a.setWeight(b.getWeight());
             b.setWeight(weight);
                        
-            statement.setInt(a.getWeight(), a.getId());
+            statement.setInt(1,a.getWeight()); 
+            statement.setInt(2,a.getId());            
             statement.executeUpdate();
-            statement.setInt(b.getWeight(), b.getId());
+            
+            statement.setInt(1, b.getWeight());
+            statement.setInt(2, b.getId());
             statement.executeUpdate();
             connection.commit();
             
@@ -136,16 +139,19 @@ public class GoodsProvider {
     public static void replace(Article a, Article b) throws SQLException {
         Connection connection = DbUtils.getConnection();
 
-        String sql = "UPDATE article SET weight = ? WHERE category_id = ?";
+        String sql = "UPDATE article SET weight = ? WHERE article_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
 
             int weight = a.getWeight();
             a.setWeight(b.getWeight());
             b.setWeight(weight);
 
-            statement.setInt(a.getWeight(), a.getId());
+            statement.setInt(1, a.getWeight());
+            statement.setInt(2, a.getId());
             statement.executeUpdate();
-            statement.setInt(b.getWeight(), b.getId());
+
+            statement.setInt(1, b.getWeight());
+            statement.setInt(2, b.getId());
             statement.executeUpdate();
             connection.commit();
 
