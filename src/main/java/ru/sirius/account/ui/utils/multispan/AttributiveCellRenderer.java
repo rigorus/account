@@ -11,17 +11,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-public class AttributiveCellRenderer extends JLabel
-        implements TableCellRenderer {
+public class AttributiveCellRenderer extends JLabel implements TableCellRenderer {
 
     protected static Border noFocusBorder;
 
     public AttributiveCellRenderer() {
+        super();
         noFocusBorder = new EmptyBorder(1, 2, 1, 2);
         setOpaque(true);
         setBorder(noFocusBorder);
     }
-
+    
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
@@ -38,24 +38,20 @@ public class AttributiveCellRenderer extends JLabel
             if (cellAtt instanceof CellFont) {
                 font = ((CellFont) cellAtt).getFont(row, column);
             }
-        }
+        }                
         if (isSelected) {
-            setForeground((foreground != null) ? foreground
-                    : table.getSelectionForeground());
+            setForeground((foreground != null) ? foreground : table.getSelectionForeground());
             setBackground(table.getSelectionBackground());
         } else {
-            setForeground((foreground != null) ? foreground
-                    : table.getForeground());
-            setBackground((background != null) ? background
-                    : table.getBackground());
+            setForeground((foreground != null) ? foreground : table.getForeground());
+            setBackground((background != null) ? background : table.getBackground());
         }
         setFont((font != null) ? font : table.getFont());
 
-        if (hasFocus) {
-            setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
+        if (hasFocus) {            
             if (table.isCellEditable(row, column)) {
-                setForeground((foreground != null) ? foreground
-                        : UIManager.getColor("Table.focusCellForeground"));
+                setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
+                setForeground((foreground != null) ? foreground  : UIManager.getColor("Table.focusCellForeground"));
                 setBackground(UIManager.getColor("Table.focusCellBackground"));
             }
         } else {

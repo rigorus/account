@@ -10,7 +10,6 @@ public class Article {
     protected String shortName;
     protected BigDecimal price;
     protected String description;
-    protected boolean deleted;
     protected int weight;
 
     public int getId() {
@@ -27,14 +26,6 @@ public class Article {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 
     public String getName() {

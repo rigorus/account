@@ -9,17 +9,23 @@ import ru.sirius.account.model.entity.Category;
 public class CreateCategoryPanel extends javax.swing.JPanel {
 
     
-    private Category category = new Category();
+    private Category category;
     private final SwingValidationGroup validationGroup = SwingValidationGroup.create();
 
     
     /**
      * Creates new form CreateGroupPanel
      */
-    public CreateCategoryPanel() {
+    public CreateCategoryPanel(Category category) {
                 
         initComponents();                            
-        validationGroup.add(groupNameTextField, StringValidators.REQUIRE_NON_EMPTY_STRING);
+        validationGroup.add(categoryNameTextField, StringValidators.REQUIRE_NON_EMPTY_STRING);
+        if( category != null){
+            this.category = category;
+            categoryNameTextField.setText(category.getName());
+        }else{
+            this.category = new Category();
+        }
     }
 
     public SwingValidationGroup getValidationGroup() {
@@ -28,7 +34,7 @@ public class CreateCategoryPanel extends javax.swing.JPanel {
     
     
     public Category getCategory(){         
-        category.setName(groupNameTextField.getText());
+        category.setName(categoryNameTextField.getText());
         return category;
     }
     
@@ -41,10 +47,10 @@ public class CreateCategoryPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        groupNameTextField = new javax.swing.JTextField();
+        categoryNameTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
 
-        groupNameTextField.setName("Наименование"); // NOI18N
+        categoryNameTextField.setName("Наименование"); // NOI18N
 
         jLabel3.setText("Наименование");
 
@@ -56,7 +62,7 @@ public class CreateCategoryPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(groupNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
+                .addComponent(categoryNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -64,13 +70,13 @@ public class CreateCategoryPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(groupNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(categoryNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addContainerGap(48, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField groupNameTextField;
+    private javax.swing.JTextField categoryNameTextField;
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 }

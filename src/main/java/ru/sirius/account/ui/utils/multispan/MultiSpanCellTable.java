@@ -5,20 +5,15 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Enumeration;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 public class MultiSpanCellTable extends JTable {
-
         
     public MultiSpanCellTable() {
         super();
         setUI(new MultiSpanCellTableUI());
-        getTableHeader().setReorderingAllowed(false);
-        setCellSelectionEnabled(true);
-        setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         setDefaultRenderer(Object.class ,new AttributiveCellRenderer());
     }
     
@@ -64,8 +59,6 @@ public class MultiSpanCellTable extends JTable {
             TableColumn aColumn = (TableColumn) enumeration.nextElement();
             cellFrame.width += aColumn.getWidth();// + columnMargin;
         }
-
-
 
         if (!includeSpacing) {
             Dimension spacing = getIntercellSpacing();

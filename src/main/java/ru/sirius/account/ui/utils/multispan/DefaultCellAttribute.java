@@ -1,7 +1,6 @@
 package ru.sirius.account.ui.utils.multispan;
 
 import java.awt.*;
-import java.util.Vector;
 
 public final class DefaultCellAttribute
         implements CellAttribute, CellSpan, ColoredCell, CellFont {
@@ -306,13 +305,6 @@ public final class DefaultCellAttribute
         initValue();
     }
 
-    /*
-     public void changeAttribute(int row, int column, Object command) {
-     }
-
-     public void changeAttribute(int[] rows, int[] columns, Object command) {
-     }
-     */
     protected boolean isOutOfBounds(int row, int column) {
         if ((row < 0) || (rowSize <= row)
                 || (column < 0) || (columnSize <= column)) {
@@ -345,40 +337,90 @@ public final class DefaultCellAttribute
             }
         }
     }
-
+    
     @Override
     public void moveRow(int start, int end, int to) {
-        
-        int index = start;        
-        int indexTo;
-        int spanBuff[][] = new int[columnSize][2]; 
+        int shift = to - start;
+        int first, last;
+        if (shift < 0) {
+            first = to;
+            last = end;
+        } else {
+            first = start;
+            last = to + end - start;
+        }
+        rotate(first, last + 1, shift);
+    }
+    
+    private static int gcd(int i, int j) {
+        return (j == 0) ? i : gcd(j, i % j);
+    }
+
+    private void rotate(int a, int b, int shift) {
+
+        int spanBuff[][] = new int[columnSize][2];
         Color foregroundBuff[] = new Color[columnSize];
         Color backgroundBuff[] = new Color[columnSize];
         Font fontBuff[] = new Font[columnSize];
-        int length = to + end - start + 1;
-        
-        for(int i = start; i < length; ++i){
-            
-            indexTo = (index + to - start) % length; 
-            
-            System.arraycopy(span[indexTo], 0, spanBuff, 0, columnSize);
-            System.arraycopy(foreground[indexTo], 0, foregroundBuff, 0, columnSize);
-            System.arraycopy(background[indexTo], 0, backgroundBuff, 0, columnSize);
-            System.arraycopy(font[indexTo], 0, fontBuff, 0, columnSize);
-            
-            System.arraycopy(span[start], 0, span[indexTo], 0, columnSize);
-            System.arraycopy(foreground[start], 0, foreground[indexTo], 0, columnSize);
-            System.arraycopy(background[start], 0, background[indexTo], 0, columnSize);
-            System.arraycopy(font[start], 0, font[indexTo], 0, columnSize);
 
-            System.arraycopy(spanBuff, 0, span[start], 0, columnSize);
-            System.arraycopy(foregroundBuff, 0, foreground[start], 0, columnSize);
-            System.arraycopy(backgroundBuff, 0, background[start], 0, columnSize);
-            System.arraycopy(fontBuff, 0, font[start], 0, columnSize);
-            
-            index = indexTo;
+        
+        int size = b - a;
+        int r = size - shift;
+        int g = gcd(size, r);
+        for (int i = 0; i < g; i++) {
+            int to = i;
+//            Object tmp = v.elementAt(a + to);
+            System.arraycopy(span[a + to], 0, spanBuff, 0, columnSize);
+            System.arraycopy(foreground[a + to], 0, foregroundBuff, 0, columnSize);
+            System.arraycopy(background[a + to], 0, backgroundBuff, 0, columnSize);
+            System.arraycopy(font[a + to], 0, fontBuff, 0, columnSize);
+            for (int from = (to + r) % size; from != i; from = (to + r) % size) {
+//                v.setElementAt(v.elementAt(a + from), a + to);
+            System.arraycopy(span[a + from], 0, span[a + to], 0, columnSize);
+            System.arraycopy(foreground[a + from], 0, foreground[a + to], 0, columnSize);
+            System.arraycopy(background[a + from], 0, background[a + to], 0, columnSize);
+            System.arraycopy(font[a + from], 0, font[a + to], 0, columnSize);
+                to = from;
+            }
+//            v.setElementAt(tmp, a + to);
+            System.arraycopy(spanBuff, 0, span[a + to], 0, columnSize);
+            System.arraycopy(foregroundBuff, 0, foreground[a + to], 0, columnSize);
+            System.arraycopy(backgroundBuff, 0, background[a + to], 0, columnSize);
+            System.arraycopy(fontBuff, 0, font[a + to], 0, columnSize);            
+        }
+    }
+
+    @Override
+    public void removeRow(int row) {
+      
+        if (rowSize > 0) {
+            --rowSize;
         }
         
+        if( columnSize == 0 || rowSize == 0){
+            span = null;
+            return;
+        }
+        
+        int[][][] oldSpan = span;
+        span = new int[rowSize][columnSize][2];
+        Color[][] oldForeground = foreground;
+        foreground = new Color[rowSize][columnSize];
+        Color[][] oldBackground = background;
+        background = new Color[rowSize][columnSize];
+        Font[][] oldFont = font;
+        font = new Font[rowSize][columnSize];
+
+        if (row > 0) {
+            System.arraycopy(oldSpan, 0, span, 0, row);
+            System.arraycopy(oldForeground, 0, foreground, 0, row);
+            System.arraycopy(oldBackground, 0, background, 0, row);
+            System.arraycopy(oldFont, 0, font, 0, row);
+        }
+        System.arraycopy(oldSpan, row + 1, span, row, rowSize - row);
+        System.arraycopy(oldForeground, row + 1, foreground, row, rowSize - row);
+        System.arraycopy(oldBackground, row + 1, background, row, rowSize - row);
+        System.arraycopy(oldFont, row + 1, font, row, rowSize - row); 
     }
     
     

@@ -1,8 +1,8 @@
 package ru.sirius.account.ui.goods;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import org.netbeans.validation.api.builtin.stringvalidation.StringValidators;
 import org.netbeans.validation.api.ui.swing.SwingValidationGroup;
@@ -14,23 +14,41 @@ import ru.sirius.account.utils.Config;
 
 public class CreateArticlePanel extends javax.swing.JPanel {
 
-    private Article article = new Article();
+    private Article article;
     private final SwingValidationGroup validationGroup = SwingValidationGroup.create();
 
     
     /**
      * Creates new form CreateArticleFrame
      */
-    public CreateArticlePanel() throws SQLException {
+    public CreateArticlePanel(Article article) throws SQLException {
 
         initComponents();
-        categoryComboBox.setModel(new DefaultComboBoxModel(
-                GoodsProvider.readCategories().toArray(new Category[0])));
+        ArrayList<Category> categories = GoodsProvider.readCategories();
+        Category[] items = new Category[categories.size() + 1];
+        System.arraycopy(categories.toArray(new Category[0]), 0, items, 1, items.length - 1);
+        categoryComboBox.setModel(new DefaultComboBoxModel(items));
         
         validationGroup.add(priceTextField, StringValidators.REQUIRE_VALID_NUMBER);
         validationGroup.add(fullNameTextField, StringValidators.REQUIRE_NON_EMPTY_STRING);
         validationGroup.add(categoryComboBox, StringValidators.REQUIRE_NON_EMPTY_STRING);
+        
+        if (article != null) {
+            this.article = article;
+            for( Category category : categories){
+                if( category.getId() == article.getCategoryId()){
+                    categoryComboBox.setSelectedItem(category);        
+                    break;
+                }
+            }            
+            fullNameTextField.setText(article.getName());
+            priceTextField.setText(article.getPrice().toString());
+        } else {
+            this.article = new Article();
+        }
     }
+    
+
 
     public SwingValidationGroup getValidationGroup() {
         return validationGroup;

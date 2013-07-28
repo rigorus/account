@@ -119,8 +119,19 @@ public class AttributiveCellTableModel extends DefaultTableModel {
         super.moveRow(start, end, to);
     }
     
+    @Override
+    public void removeRow(int row) {
+        attributiveModel.removeRow(row);
+        super.removeRow(row);
+    }
+    
     public CellAttribute getCellAttribute() {
         return attributiveModel;
+    }
+    
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
     }
 
 //    public void setCellAttribute(CellAttribute newCellAtt) {

@@ -15,4 +15,6 @@ public interface CellAttribute {
 //    public void setSize(Dimension size);
 
     public void moveRow(int start, int end, int to);
+
+    public void removeRow(int row);
 }
