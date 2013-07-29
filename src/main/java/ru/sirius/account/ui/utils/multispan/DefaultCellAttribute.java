@@ -67,6 +67,25 @@ public final class DefaultCellAttribute
         return true;
     }
 
+    public void attributiveRow(int row, Color background, Color foreground, Font font){
+        int[] columns = new int[columnSize];
+        for (int i = 0; i < columns.length; ++i) {
+            columns[i] = i;
+        }
+        this.setBackground(background, new int[]{row}, columns);
+        this.setForeground(foreground, new int[]{row}, columns);
+        this.setFont(font, new int[]{row}, columns);
+    }
+    
+    public void combineRow(int row){
+        
+        int[] columns = new int[columnSize];
+        for(int i = 0; i < columns.length; ++i){
+            columns[i] = i;            
+        }
+        this.combine(new int[]{row}, columns);
+    }
+    
     @Override
     public void combine(int[] rows, int[] columns) {
         if (isOutOfBounds(rows, columns)) {

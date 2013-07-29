@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import org.netbeans.validation.api.ui.swing.ValidationPanel;
 import org.openide.util.Exceptions;
+import ru.sirius.account.model.entity.Article;
 import ru.sirius.account.ui.utils.multispan.AttributiveCellTableModel;
 import ru.sirius.account.ui.utils.multispan.MultiSpanCellTable;
 
@@ -163,7 +164,7 @@ public class MainGoodsPanel extends javax.swing.JPanel {
         validationPanel.setInnerComponent(panel);
         if (validationPanel.showOkCancelDialog("Создание категории")) {
             try {
-                builder.addCategory(panel.getCategory());
+                builder.createCategory(panel.getCategory());
             } catch (SQLException ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -176,7 +177,7 @@ public class MainGoodsPanel extends javax.swing.JPanel {
             ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
             validationPanel.setInnerComponent(panel);
             if (validationPanel.showOkCancelDialog("Создание артикула")) {
-                    builder.addArticle(panel.getArticle());
+                    builder.createArticle(panel.getArticle());
             }
         } catch (SQLException ex) {
             Exceptions.printStackTrace(ex);
@@ -184,31 +185,32 @@ public class MainGoodsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_addArticleButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        int position = goodsTable.getSelectedRow();
-        if( position == -1){
+
+        GoodsModelBuilder.Row row = builder.getRow(goodsTable.getSelectedRow());
+        if (row == null) {
             return;
-        }        
-        GoodsModelBuilder.SearchResult result = builder.new SearchResult(position);
-        if( result.category != null){
-            CreateCategoryPanel panel = new CreateCategoryPanel(result.category);
+        }
+        
+        if( row.rowtype == GoodsModelBuilder.ROWTYPE.CATEGORY){
+            CreateCategoryPanel panel = new CreateCategoryPanel(row.category);
             ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
             validationPanel.setInnerComponent(panel);
             if (validationPanel.showOkCancelDialog("Редактирование категории")) {
                 try {
-                    result.category = panel.getCategory();
-                    builder.updateCategory(result);
+                    row.category = panel.getCategory();
+                    builder.updateRow(row);
                 } catch (SQLException ex) {
                     Exceptions.printStackTrace(ex);
                 }
             } 
-        }else if( result.article != null){
+        }else if( row.article != null){
             try {
-                CreateArticlePanel panel = new CreateArticlePanel(result.article);
+                CreateArticlePanel panel = new CreateArticlePanel(row.article);
                 ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
                 validationPanel.setInnerComponent(panel);
                 if (validationPanel.showOkCancelDialog("Редактирование артикула")) {
-                    result.article = panel.getArticle();
-                    builder.updateArticle(result);
+                    row.article = panel.getArticle();
+                    builder.updateRow(row);
                 }
             } catch (SQLException ex) {
                 Exceptions.printStackTrace(ex);
@@ -219,11 +221,14 @@ public class MainGoodsPanel extends javax.swing.JPanel {
 
     private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
         try {
-            int position = goodsTable.getSelectedRow();
-            if (position == -1) {
+
+            GoodsModelBuilder.Row row = builder.getRow(goodsTable.getSelectedRow());
+            if (row == null) {
                 return;
             }
-            builder.move(position,true);        
+
+            builder.moveRowUp(row);        
+            
         } catch (SQLException ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -231,11 +236,11 @@ public class MainGoodsPanel extends javax.swing.JPanel {
 
     private void downButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downButtonActionPerformed
         try {
-            int position = goodsTable.getSelectedRow();
-            if (position == -1) {
+            GoodsModelBuilder.Row row = builder.getRow(goodsTable.getSelectedRow());
+            if (row == null) {
                 return;
             }
-            builder.move(position,false);
+            builder.moveRowDown(row);
         } catch (SQLException ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -243,18 +248,20 @@ public class MainGoodsPanel extends javax.swing.JPanel {
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         try {
-            int position = goodsTable.getSelectedRow();
-            if (position == -1) {
+
+            GoodsModelBuilder.Row row = builder.getRow(goodsTable.getSelectedRow());
+            if (row == null) {
                 return;
             }
-            GoodsModelBuilder.SearchResult result = builder.new SearchResult(position);
-            if (result.category != null &&  JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this, 
-                    "Удалить директорию и все артикулы, входящие в неё?", "Удаление", JOptionPane.YES_NO_OPTION)) {
-                builder.removeCategory(result, hiddenButton.isSelected());
+
+            if (row.rowtype == GoodsModelBuilder.ROWTYPE.CATEGORY &&  JOptionPane.YES_OPTION == 
+                    JOptionPane.showConfirmDialog(this, "Удалить директорию и все артикулы, входящие в неё?", 
+                    "Удаление", JOptionPane.YES_NO_OPTION)) {
+                builder.removeRow(row, hiddenButton.isSelected());
                 
-            } else if (result.article != null && JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this,
-                    "Удалить артикул?", "Удаление", JOptionPane.YES_NO_OPTION)) {
-                builder.removeArticle(result, hiddenButton.isSelected());
+            } else if (row.rowtype == GoodsModelBuilder.ROWTYPE.ARTICLE && JOptionPane.YES_OPTION == 
+                    JOptionPane.showConfirmDialog(this, "Удалить артикул?", "Удаление", JOptionPane.YES_NO_OPTION)) {
+                builder.removeRow(row, hiddenButton.isSelected());
             }
         } catch (SQLException ex) {
             Exceptions.printStackTrace(ex);
@@ -262,22 +269,29 @@ public class MainGoodsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void hiddenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hiddenButtonActionPerformed
+       
         boolean show = hiddenButton.isSelected();
         restoreButton.setEnabled(show);
-        builder.showHidden(show);
+        builder.showDeleted(show);
+        
     }//GEN-LAST:event_hiddenButtonActionPerformed
 
     private void restoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restoreButtonActionPerformed
+        
         int position = goodsTable.getSelectedRow();
-        GoodsModelBuilder.SearchResult result = builder.new SearchResult(position);
-        if( result.article != null){
+        if (position == -1) {
+            return;
+        }
+        
+        Article article = builder.getDeletedArticle(position);
+        
+        if( article != null){
             try {
-                CreateArticlePanel panel = new CreateArticlePanel(result.article);
+                CreateArticlePanel panel = new CreateArticlePanel(article);
                 ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
                 validationPanel.setInnerComponent(panel);
                 if (validationPanel.showOkCancelDialog("Восстановление артикула")) {
-                    result.article = panel.getArticle();
-                    builder.restoreArticle(result);
+                    builder.restoreArticle(panel.getArticle());
                 }
             } catch (SQLException ex) {
                 Exceptions.printStackTrace(ex);

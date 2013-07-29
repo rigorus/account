@@ -14,6 +14,7 @@ import ru.sirius.account.model.entity.Article;
 
 public class GoodsProvider {
     
+    public static final int CATEGORY_STEP = 10000;
 //    private static final Logger LOGGER = Logger.getLogger(GoodsProvider.class);
         
     public static ArrayList<Article> readCategoryArticles(int categoryId) throws SQLException{
@@ -115,7 +116,7 @@ public class GoodsProvider {
         Connection connection = DbUtils.getConnection();
 
         String updateCategory = "UPDATE category SET weight = ? WHERE category_id = ?";
-        String updateArticles = "UPDER article SET weight = ? WHERE category_id = ?";
+        String updateArticles = "UPDATE article SET weight = ? WHERE category_id = ?";
         try (PreparedStatement articles = connection.prepareStatement(updateArticles);
                 PreparedStatement category = connection.prepareStatement(updateCategory)) {                
             
@@ -133,7 +134,7 @@ public class GoodsProvider {
             category.setInt(2, b.getId());
             category.executeUpdate();
             connection.commit();
-            articles.setInt(b.getId(), b.getWeight());
+            articles.setInt(b.getWeight(), b.getId());
             articles.executeUpdate();
 
             
