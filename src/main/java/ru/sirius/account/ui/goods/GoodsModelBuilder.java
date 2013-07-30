@@ -4,7 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.TreeSet;
+import java.util.Collections;
+import java.util.Comparator;
 import ru.sirius.account.db.GoodsProvider;
 import ru.sirius.account.model.entity.Article;
 import ru.sirius.account.model.entity.Category;
@@ -19,7 +20,7 @@ public class GoodsModelBuilder {
     private DefaultCellAttribute attribute; 
 
     private ArrayList<Row> rows = new ArrayList<>();
-    private TreeSet<Article> deleted; 
+    private ArrayList<Article> deleted; 
 
     public GoodsModelBuilder(AttributiveCellTableModel model) throws SQLException{
         
@@ -31,7 +32,7 @@ public class GoodsModelBuilder {
         
         this.attribute = (DefaultCellAttribute) model.getCellAttribute();
         
-    }
+    }    
        
     public void build() throws SQLException{
         for (Category category : GoodsProvider.readCategories()) {
@@ -43,6 +44,16 @@ public class GoodsModelBuilder {
         deleted = GoodsProvider.readDeletedArticles();   
     }    
     
+    private void addDeleted(Article article){
+        
+        deleted.add(article);
+        Collections.sort(deleted, new Comparator<Article>() {
+            @Override
+            public int compare(Article o1, Article o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+    }    
     //TODO вынести создание строк артикула и категории в отдельную функцию !!!!
     public void showDeleted(boolean show){
         if( show ){
@@ -64,25 +75,19 @@ public class GoodsModelBuilder {
     
     public Article getDeletedArticle(int position){
         int index = position - rows.size() - 1;
-        for (Article article : deleted) {            
-            if( index-- == 0){
-                return article;
-            }                        
-        }
-        
-        return null;
+        return deleted.get(index);
     }
 
-    void restoreArticle(Article article) throws SQLException {
+    public void restoreArticle(Article article) throws SQLException {
                 
         Row previous = getLastInCategory(article.getCategoryId());
         article.setWeight(previous.getWeight() + 1);
         
-        GoodsProvider.updateArticle(article);
+        GoodsProvider.restoreArticle(article);
         
+        model.removeRow(rows.size() + 1 + deleted.indexOf(article));
         deleted.remove(article);
-//        model.removeRow(result.position);
-
+        
         Row row = new Row(ROWTYPE.ARTICLE, previous.category, article);
         insertRow(rows.indexOf(previous) + 1, row);        
     }
@@ -121,35 +126,56 @@ public class GoodsModelBuilder {
         }
     }
     
-    //TODO  изменение weight !!!!
     public void removeRow(Row row, boolean showDeleted) throws SQLException{
         
         if (showDeleted ) showDeleted(false);
 
         int position = rows.indexOf(row);
-        rows.remove(position);
-        model.removeRow(position);
         
         switch (row.rowtype) {
             case CATEGORY:
-                GoodsProvider.deleteCategory(row.category);
-                GoodsProvider.downWeight(row.category.getWeight());                  
-                for( int index = position; index <= rows.indexOf(getLastInCategory(row.category.getId())); ++ index){                
-                    deleted.add(rows.get(index).article);
-                    rows.remove(index);
-                    model.removeRow(index);                   
+                GoodsProvider.deleteCategory(row.category);    
+                deleteCategory(row);
+                rows.remove(position);
+                model.removeRow(position);
+                int last = rows.indexOf(getNextCategory(row));
+                for( int i = position; i < last; ++i){
+                    addDeleted(rows.get(position).article);                
+                    rows.remove(position);
+                    model.removeRow(position);
                 }
                 break;
             case ARTICLE:
                 GoodsProvider.deleteArticule(row.article);
-//                GoodsProvider.downWeight(row.category.getWeight()); TODO то же самое только для артикула
-                deleted.add(row.article);
+                deleteArticle(row.article);              
+                for( int i = position + 1; i <= rows.indexOf(getLastInCategory(row.category.getId())); ++i) {
+                    rows.get(i).decrementWeight(1);
+                }
+                addDeleted(row.article);
+                rows.remove(position);
+                model.removeRow(position);
                 break;
             default:
                 throw new IllegalArgumentException("Неизвестный тип строки");
         }
         
         if (showDeleted) showDeleted(true);
+    }
+    
+    public void deleteCategory(Row  row){
+        int position = rows.indexOf(row) + 1;
+        for (int index = position; index < rows.size(); ++index) {
+            if (rows.get(index).category.getId() == row.category.getId()) {
+                rows.get(index).setWeight(Integer.MAX_VALUE);
+            }else{
+                rows.get(index).decrementWeight(GoodsProvider.CATEGORY_STEP);
+            }
+        }
+    }
+    
+    public void deleteArticle(Article article) {
+        article.setWeight(Integer.MAX_VALUE);
+        article.setCategoryId(0);
     }
         
     public void moveRowUp(Row row) throws SQLException{        
@@ -159,21 +185,23 @@ public class GoodsModelBuilder {
             case CATEGORY:
                 previous = getPreviousCategory(row);
                 if( previous != null){
-                    GoodsProvider.replace(row.category, previous.category);
+                    GoodsProvider.replaceCategory(row.category, previous.category);
+                    replaceCategory(row.category, previous.category);
+                
                     int end = rows.indexOf(getLastInCategory(row.category.getId()));
-                    int to = rows.indexOf(previous);        
-                    for( int i = position; i <= end; ++i){
-                        row = rows.remove(i);
+                    int to = rows.indexOf(previous);
+                    for (int i = 0; i < end - position + 1; ++i) {
+                        row = rows.remove(end);
                         rows.add(to, row);
                     }
-                    // TODO изменить weight для артикулов !!!
                     model.moveRow(position, end, to);
                 }
                 break;
             case ARTICLE:
                 previous = rows.get(position - 1);
                 if( previous.rowtype == ROWTYPE.ARTICLE){
-                    GoodsProvider.replace(row.article, previous.article);
+                    GoodsProvider.replaceArticle(row.article, previous.article);
+                    replaceArticle(row.article, previous.article);
                     rows.set(position - 1, row);
                     rows.set(position,  previous);
                     model.moveRow(position, position, position - 1);
@@ -191,11 +219,13 @@ public class GoodsModelBuilder {
             case CATEGORY:
                 next = getNextCategory(row);
                 if (next != null) {
-                    GoodsProvider.replace(row.category, next.category);
+                    GoodsProvider.replaceCategory(row.category, next.category);
+                    replaceCategory(row.category, next.category);
+                    
                     int start = rows.indexOf(next);
                     int end = rows.indexOf(getLastInCategory(next.category.getId()));
-                    for (int i = start; i <= end; ++i) {
-                        row = rows.remove(i);
+                    for (int i = 0; i < end - start + 1; ++i) {
+                        row = rows.remove(end);
                         rows.add(position, row);
                     }
                     model.moveRow(start, end, position);
@@ -204,7 +234,8 @@ public class GoodsModelBuilder {
             case ARTICLE:
                 if( position < rows.size() - 1 && rows.get(position + 1).rowtype == ROWTYPE.ARTICLE){
                     next = rows.get(position + 1);
-                    GoodsProvider.replace(row.article, next.article);
+                    GoodsProvider.replaceArticle(row.article, next.article);
+                    replaceArticle(row.article, next.article);
                     rows.set(position + 1, row);
                     rows.set(position, next);
                     model.moveRow(position + 1, position + 1, position);
@@ -213,6 +244,23 @@ public class GoodsModelBuilder {
             default:
                 throw new IllegalArgumentException("Неизвестный тип строки");
         }
+    }
+    
+    private void replaceCategory(Category a, Category b){
+        int incremnt = b.getWeight() - a.getWeight();
+        for (Row r : rows) {
+            if (a.getId() == r.category.getId()) {
+                r.incrementWeight(incremnt);
+            } else if (b.getId() == r.category.getId()) {
+                r.incrementWeight(-incremnt);
+            }
+        }
+    }
+    
+    private void replaceArticle(Article a, Article b){
+        int weight = a.getWeight();
+        a.setWeight(b.getWeight());
+        b.setWeight(weight);
     }
      
     public Row getRow(int position){
@@ -302,5 +350,28 @@ public class GoodsModelBuilder {
             return rowtype == ROWTYPE.ARTICLE ? article.getWeight() : category.getWeight();
         }
         
+        public void setWeight(int weight) {
+            if( rowtype == ROWTYPE.ARTICLE ){
+                article.setWeight(weight);
+            }else{
+               category.setWeight(weight);
+            }
+        }        
+        
+        public void decrementWeight(int decrement){
+            if (rowtype == ROWTYPE.ARTICLE) {
+                article.setWeight(article.getWeight() - decrement);
+            } else {
+                category.setWeight(category.getWeight() - decrement);
+            } 
+        }
+        
+        public void incrementWeight(int decrement) {
+            if (rowtype == ROWTYPE.ARTICLE) {
+                article.setWeight(article.getWeight() + decrement);
+            } else {
+                category.setWeight(category.getWeight() + decrement);
+            }
+        }
     }    
 }

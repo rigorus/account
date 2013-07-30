@@ -11,7 +11,7 @@ import ru.sirius.account.model.entity.Article;
 import ru.sirius.account.ui.utils.multispan.AttributiveCellTableModel;
 import ru.sirius.account.ui.utils.multispan.MultiSpanCellTable;
 
-
+// TODO сделать неизменяемым размеры ддиалогов редактирования и суметь задавать им location !!!
 public class MainGoodsPanel extends javax.swing.JPanel {
 
     private GoodsModelBuilder builder;
@@ -161,7 +161,7 @@ public class MainGoodsPanel extends javax.swing.JPanel {
     private void addCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCategoryButtonActionPerformed
         CreateCategoryPanel panel = new CreateCategoryPanel(null);
         ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
-        validationPanel.setInnerComponent(panel);
+        validationPanel.setInnerComponent(panel);        
         if (validationPanel.showOkCancelDialog("Создание категории")) {
             try {
                 builder.createCategory(panel.getCategory());
