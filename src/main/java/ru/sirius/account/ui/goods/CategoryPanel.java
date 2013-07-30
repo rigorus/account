@@ -6,7 +6,7 @@ import org.netbeans.validation.api.ui.swing.SwingValidationGroup;
 import ru.sirius.account.model.entity.Category;
 
 
-public class CreateCategoryPanel extends javax.swing.JPanel {
+public class CategoryPanel extends javax.swing.JPanel {
 
     
     private Category category;
@@ -16,7 +16,7 @@ public class CreateCategoryPanel extends javax.swing.JPanel {
     /**
      * Creates new form CreateGroupPanel
      */
-    public CreateCategoryPanel(Category category) {
+    public CategoryPanel(Category category) {
                 
         initComponents();                            
         validationGroup.add(categoryNameTextField, StringValidators.REQUIRE_NON_EMPTY_STRING);

@@ -44,7 +44,9 @@ create table partner(
     email varchar(200),
     phone varchar(20),
     template_id int,
+    deleted boolean not null default false,
     constraint partner__pk primary key (partner_id),
+    constraint partner__fio__uk unique key (fio),
     constraint partner__template__fk foreign key (template_id) references template(template_id)
 );
 

@@ -6,13 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import ru.sirius.account.db.GoodsProvider;
+import ru.sirius.account.db.GoodsService;
 import ru.sirius.account.model.entity.Article;
 import ru.sirius.account.model.entity.Category;
 import ru.sirius.account.ui.utils.multispan.AttributiveCellTableModel;
 import ru.sirius.account.ui.utils.multispan.DefaultCellAttribute;
 
-public class GoodsModelBuilder {
+public class RBGoodsController {
 
     public enum ROWTYPE {CATEGORY, ARTICLE};
     
@@ -22,7 +22,7 @@ public class GoodsModelBuilder {
     private ArrayList<Row> rows = new ArrayList<>();
     private ArrayList<Article> deleted; 
 
-    public GoodsModelBuilder(AttributiveCellTableModel model) throws SQLException{
+    public RBGoodsController(AttributiveCellTableModel model) throws SQLException{
         
         this.model = model;
         
@@ -34,14 +34,14 @@ public class GoodsModelBuilder {
         
     }    
        
-    public void build() throws SQLException{
-        for (Category category : GoodsProvider.readCategories()) {
+    public void initialize() throws SQLException{
+        for (Category category : GoodsService.readCategories()) {
             insertRow(rows.size(), new Row(ROWTYPE.CATEGORY, category, null));
-            for (Article article : GoodsProvider.readCategoryArticles(category.getId())) {
+            for (Article article : GoodsService.readCategoryArticles(category.getId())) {
                 insertRow(rows.size(), new Row(ROWTYPE.ARTICLE, category, article));
             }
         }
-        deleted = GoodsProvider.readDeletedArticles();   
+        deleted = GoodsService.readDeletedArticles();   
     }    
     
     private void addDeleted(Article article){
@@ -83,7 +83,7 @@ public class GoodsModelBuilder {
         Row previous = getLastInCategory(article.getCategoryId());
         article.setWeight(previous.getWeight() + 1);
         
-        GoodsProvider.restoreArticle(article);
+        GoodsService.restoreArticle(article);
         
         model.removeRow(rows.size() + 1 + deleted.indexOf(article));
         deleted.remove(article);
@@ -93,9 +93,9 @@ public class GoodsModelBuilder {
     }
        
     public void createCategory(Category category) throws SQLException{
-        category.setWeight((getCategoryCount() + 1) * GoodsProvider.CATEGORY_STEP);
+        category.setWeight((getCategoryCount() + 1) * GoodsService.CATEGORY_STEP);
 
-        GoodsProvider.createCategory(category);
+        GoodsService.createCategory(category);
         
         Row row = new Row(ROWTYPE.CATEGORY, category, null);
         insertRow(rows.size(), row);
@@ -105,7 +105,7 @@ public class GoodsModelBuilder {
         Row previous = getLastInCategory(article.getCategoryId());
         article.setWeight(previous.getWeight() + 1);
 
-        GoodsProvider.createArticle(article);
+        GoodsService.createArticle(article);
 
         Row row = new Row(ROWTYPE.ARTICLE, previous.category, article);       
         insertRow(rows.indexOf(previous) + 1, row);
@@ -114,11 +114,11 @@ public class GoodsModelBuilder {
     public void updateRow(Row row) throws SQLException{
         switch (row.rowtype) {
             case CATEGORY:
-                GoodsProvider.updateCategory(row.category);
+                GoodsService.updateCategory(row.category);
                 model.setValueAt(row.category.getName(), rows.indexOf(row), 0);
                 break;
             case ARTICLE:
-                GoodsProvider.updateArticle(row.article);
+                GoodsService.updateArticle(row.article);
                 model.setValueAt(row.article.getName(), rows.indexOf(row), 0);
                 break;
             default:
@@ -134,7 +134,7 @@ public class GoodsModelBuilder {
         
         switch (row.rowtype) {
             case CATEGORY:
-                GoodsProvider.deleteCategory(row.category);    
+                GoodsService.deleteCategory(row.category);    
                 deleteCategory(row);
                 rows.remove(position);
                 model.removeRow(position);
@@ -146,7 +146,7 @@ public class GoodsModelBuilder {
                 }
                 break;
             case ARTICLE:
-                GoodsProvider.deleteArticule(row.article);
+                GoodsService.deleteArticule(row.article);
                 deleteArticle(row.article);              
                 for( int i = position + 1; i <= rows.indexOf(getLastInCategory(row.category.getId())); ++i) {
                     rows.get(i).decrementWeight(1);
@@ -168,7 +168,7 @@ public class GoodsModelBuilder {
             if (rows.get(index).category.getId() == row.category.getId()) {
                 rows.get(index).setWeight(Integer.MAX_VALUE);
             }else{
-                rows.get(index).decrementWeight(GoodsProvider.CATEGORY_STEP);
+                rows.get(index).decrementWeight(GoodsService.CATEGORY_STEP);
             }
         }
     }
@@ -185,7 +185,7 @@ public class GoodsModelBuilder {
             case CATEGORY:
                 previous = getPreviousCategory(row);
                 if( previous != null){
-                    GoodsProvider.replaceCategory(row.category, previous.category);
+                    GoodsService.replaceCategory(row.category, previous.category);
                     replaceCategory(row.category, previous.category);
                 
                     int end = rows.indexOf(getLastInCategory(row.category.getId()));
@@ -200,7 +200,7 @@ public class GoodsModelBuilder {
             case ARTICLE:
                 previous = rows.get(position - 1);
                 if( previous.rowtype == ROWTYPE.ARTICLE){
-                    GoodsProvider.replaceArticle(row.article, previous.article);
+                    GoodsService.replaceArticle(row.article, previous.article);
                     replaceArticle(row.article, previous.article);
                     rows.set(position - 1, row);
                     rows.set(position,  previous);
@@ -219,7 +219,7 @@ public class GoodsModelBuilder {
             case CATEGORY:
                 next = getNextCategory(row);
                 if (next != null) {
-                    GoodsProvider.replaceCategory(row.category, next.category);
+                    GoodsService.replaceCategory(row.category, next.category);
                     replaceCategory(row.category, next.category);
                     
                     int start = rows.indexOf(next);
@@ -234,7 +234,7 @@ public class GoodsModelBuilder {
             case ARTICLE:
                 if( position < rows.size() - 1 && rows.get(position + 1).rowtype == ROWTYPE.ARTICLE){
                     next = rows.get(position + 1);
-                    GoodsProvider.replaceArticle(row.article, next.article);
+                    GoodsService.replaceArticle(row.article, next.article);
                     replaceArticle(row.article, next.article);
                     rows.set(position + 1, row);
                     rows.set(position, next);

@@ -2,7 +2,9 @@ package ru.sirius.account.ui;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
-import ru.sirius.account.ui.goods.MainGoodsPanel;
+import javax.swing.JPanel;
+import ru.sirius.account.ui.goods.RBGoodsPanel;
+import ru.sirius.account.ui.partner.RBPartnerPanel;
 
 
 public class AccountApplication extends javax.swing.JFrame {
@@ -32,6 +34,7 @@ public class AccountApplication extends javax.swing.JFrame {
         exitMenuItem = new javax.swing.JMenuItem();
         referenceMenu = new javax.swing.JMenu();
         nomenclatureMenuItem = new javax.swing.JMenuItem();
+        partnerMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
@@ -69,7 +72,7 @@ public class AccountApplication extends javax.swing.JFrame {
         referenceMenu.setText("Справочники");
 
         nomenclatureMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
-        nomenclatureMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/sirius/account/ui/goods_16.png"))); // NOI18N
+        nomenclatureMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/sirius/account/ui/goods.png"))); // NOI18N
         nomenclatureMenuItem.setText("Номенклатура");
         nomenclatureMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,6 +80,16 @@ public class AccountApplication extends javax.swing.JFrame {
             }
         });
         referenceMenu.add(nomenclatureMenuItem);
+
+        partnerMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        partnerMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/sirius/account/ui/partner.png"))); // NOI18N
+        partnerMenuItem.setText("Партнёры");
+        partnerMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                partnerMenuItemActionPerformed(evt);
+            }
+        });
+        referenceMenu.add(partnerMenuItem);
 
         menuBar.add(referenceMenu);
 
@@ -103,7 +116,7 @@ public class AccountApplication extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 392, Short.MAX_VALUE)
+            .addGap(0, 396, Short.MAX_VALUE)
         );
 
         pack();
@@ -114,24 +127,31 @@ public class AccountApplication extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void nomenclatureMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomenclatureMenuItemActionPerformed
-        
-        MainGoodsPanel goodsPanel = new MainGoodsPanel();
+        RBGoodsPanel goodsPanel = new RBGoodsPanel();
+        setFrontPanel(goodsPanel);
+    }//GEN-LAST:event_nomenclatureMenuItemActionPerformed
+
+    private void partnerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_partnerMenuItemActionPerformed
+        RBPartnerPanel partnerPanel = new RBPartnerPanel();
+        setFrontPanel(partnerPanel);
+    }//GEN-LAST:event_partnerMenuItemActionPerformed
+
+    private void setFrontPanel(JPanel panel){
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(goodsPanel, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+                .addComponent(panel, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
                 .addContainerGap()));
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(goodsPanel, GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
-                .addContainerGap()));
-    }//GEN-LAST:event_nomenclatureMenuItemActionPerformed
-
+                .addComponent(panel, GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                .addContainerGap()));        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
@@ -142,6 +162,7 @@ public class AccountApplication extends javax.swing.JFrame {
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem nomenclatureMenuItem;
     private javax.swing.JMenuItem openMenuItem;
+    private javax.swing.JMenuItem partnerMenuItem;
     private javax.swing.JMenu referenceMenu;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;

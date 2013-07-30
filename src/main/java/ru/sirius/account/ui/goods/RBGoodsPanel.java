@@ -12,12 +12,13 @@ import ru.sirius.account.ui.utils.multispan.AttributiveCellTableModel;
 import ru.sirius.account.ui.utils.multispan.MultiSpanCellTable;
 
 // TODO сделать неизменяемым размеры ддиалогов редактирования и суметь задавать им location !!!
-public class MainGoodsPanel extends javax.swing.JPanel {
+// TODO выдавать осмысленную информацию о сбоях - например артикул с таким названием уже существует !!!
+public class RBGoodsPanel extends javax.swing.JPanel {
 
-    private GoodsModelBuilder builder;
+    private RBGoodsController controller;
 
     
-    public MainGoodsPanel() {
+    public RBGoodsPanel() {
         initComponents();
         addCategoryButton.setIcon(new ImageIcon(this.getClass().getResource("add_category.png")));
         addArticleButton.setIcon(new ImageIcon(this.getClass().getResource("add_article.png")));
@@ -25,14 +26,14 @@ public class MainGoodsPanel extends javax.swing.JPanel {
         upButton.setIcon(new ImageIcon(this.getClass().getResource("up.png")));
         downButton.setIcon(new ImageIcon(this.getClass().getResource("down.png")));
         deleteButton.setIcon(new ImageIcon(this.getClass().getResource("delete.png")));
-        hiddenButton.setIcon(new ImageIcon(this.getClass().getResource("hidden.png")));        
-        restoreButton.setIcon(new ImageIcon(this.getClass().getResource("restore.png")));
+        hiddenButton.setIcon(new ImageIcon(this.getClass().getResource("../hidden.png")));        
+        restoreButton.setIcon(new ImageIcon(this.getClass().getResource("../restore.png")));
         
         try {
-            builder = new GoodsModelBuilder((AttributiveCellTableModel) goodsTable.getModel());
-            builder.build();
+            controller = new RBGoodsController((AttributiveCellTableModel) goodsTable.getModel());
+            controller.initialize();
         } catch (SQLException ex) {
-            Logger.getLogger(MainGoodsPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RBGoodsPanel.class.getName()).log(Level.SEVERE, null, ex);
         }                
     }
 
@@ -159,12 +160,12 @@ public class MainGoodsPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCategoryButtonActionPerformed
-        CreateCategoryPanel panel = new CreateCategoryPanel(null);
+        CategoryPanel panel = new CategoryPanel(null);
         ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
         validationPanel.setInnerComponent(panel);        
         if (validationPanel.showOkCancelDialog("Создание категории")) {
             try {
-                builder.createCategory(panel.getCategory());
+                controller.createCategory(panel.getCategory());
             } catch (SQLException ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -173,11 +174,11 @@ public class MainGoodsPanel extends javax.swing.JPanel {
 
     private void addArticleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addArticleButtonActionPerformed
         try {
-            CreateArticlePanel panel = new CreateArticlePanel(null);
+            ArticlePanel panel = new ArticlePanel(null);
             ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
             validationPanel.setInnerComponent(panel);
             if (validationPanel.showOkCancelDialog("Создание артикула")) {
-                    builder.createArticle(panel.getArticle());
+                    controller.createArticle(panel.getArticle());
             }
         } catch (SQLException ex) {
             Exceptions.printStackTrace(ex);
@@ -186,31 +187,31 @@ public class MainGoodsPanel extends javax.swing.JPanel {
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
 
-        GoodsModelBuilder.Row row = builder.getRow(goodsTable.getSelectedRow());
+        RBGoodsController.Row row = controller.getRow(goodsTable.getSelectedRow());
         if (row == null) {
             return;
         }
         
-        if( row.rowtype == GoodsModelBuilder.ROWTYPE.CATEGORY){
-            CreateCategoryPanel panel = new CreateCategoryPanel(row.category);
+        if( row.rowtype == RBGoodsController.ROWTYPE.CATEGORY){
+            CategoryPanel panel = new CategoryPanel(row.category);
             ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
             validationPanel.setInnerComponent(panel);
             if (validationPanel.showOkCancelDialog("Редактирование категории")) {
                 try {
                     row.category = panel.getCategory();
-                    builder.updateRow(row);
+                    controller.updateRow(row);
                 } catch (SQLException ex) {
                     Exceptions.printStackTrace(ex);
                 }
             } 
         }else if( row.article != null){
             try {
-                CreateArticlePanel panel = new CreateArticlePanel(row.article);
+                ArticlePanel panel = new ArticlePanel(row.article);
                 ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
                 validationPanel.setInnerComponent(panel);
                 if (validationPanel.showOkCancelDialog("Редактирование артикула")) {
                     row.article = panel.getArticle();
-                    builder.updateRow(row);
+                    controller.updateRow(row);
                 }
             } catch (SQLException ex) {
                 Exceptions.printStackTrace(ex);
@@ -222,12 +223,12 @@ public class MainGoodsPanel extends javax.swing.JPanel {
     private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
         try {
 
-            GoodsModelBuilder.Row row = builder.getRow(goodsTable.getSelectedRow());
+            RBGoodsController.Row row = controller.getRow(goodsTable.getSelectedRow());
             if (row == null) {
                 return;
             }
 
-            builder.moveRowUp(row);        
+            controller.moveRowUp(row);        
             
         } catch (SQLException ex) {
             Exceptions.printStackTrace(ex);
@@ -236,11 +237,11 @@ public class MainGoodsPanel extends javax.swing.JPanel {
 
     private void downButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downButtonActionPerformed
         try {
-            GoodsModelBuilder.Row row = builder.getRow(goodsTable.getSelectedRow());
+            RBGoodsController.Row row = controller.getRow(goodsTable.getSelectedRow());
             if (row == null) {
                 return;
             }
-            builder.moveRowDown(row);
+            controller.moveRowDown(row);
         } catch (SQLException ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -249,19 +250,19 @@ public class MainGoodsPanel extends javax.swing.JPanel {
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         try {
 
-            GoodsModelBuilder.Row row = builder.getRow(goodsTable.getSelectedRow());
+            RBGoodsController.Row row = controller.getRow(goodsTable.getSelectedRow());
             if (row == null) {
                 return;
             }
 
-            if (row.rowtype == GoodsModelBuilder.ROWTYPE.CATEGORY &&  JOptionPane.YES_OPTION == 
+            if (row.rowtype == RBGoodsController.ROWTYPE.CATEGORY &&  JOptionPane.YES_OPTION == 
                     JOptionPane.showConfirmDialog(this, "Удалить директорию и все артикулы, входящие в неё?", 
                     "Удаление", JOptionPane.YES_NO_OPTION)) {
-                builder.removeRow(row, hiddenButton.isSelected());
+                controller.removeRow(row, hiddenButton.isSelected());
                 
-            } else if (row.rowtype == GoodsModelBuilder.ROWTYPE.ARTICLE && JOptionPane.YES_OPTION == 
+            } else if (row.rowtype == RBGoodsController.ROWTYPE.ARTICLE && JOptionPane.YES_OPTION == 
                     JOptionPane.showConfirmDialog(this, "Удалить артикул?", "Удаление", JOptionPane.YES_NO_OPTION)) {
-                builder.removeRow(row, hiddenButton.isSelected());
+                controller.removeRow(row, hiddenButton.isSelected());
             }
         } catch (SQLException ex) {
             Exceptions.printStackTrace(ex);
@@ -272,7 +273,7 @@ public class MainGoodsPanel extends javax.swing.JPanel {
        
         boolean show = hiddenButton.isSelected();
         restoreButton.setEnabled(show);
-        builder.showDeleted(show);
+        controller.showDeleted(show);
         
     }//GEN-LAST:event_hiddenButtonActionPerformed
 
@@ -283,15 +284,15 @@ public class MainGoodsPanel extends javax.swing.JPanel {
             return;
         }
         
-        Article article = builder.getDeletedArticle(position);
+        Article article = controller.getDeletedArticle(position);
         
         if( article != null){
             try {
-                CreateArticlePanel panel = new CreateArticlePanel(article);
+                ArticlePanel panel = new ArticlePanel(article);
                 ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
                 validationPanel.setInnerComponent(panel);
                 if (validationPanel.showOkCancelDialog("Восстановление артикула")) {
-                    builder.restoreArticle(panel.getArticle());
+                    controller.restoreArticle(panel.getArticle());
                 }
             } catch (SQLException ex) {
                 Exceptions.printStackTrace(ex);

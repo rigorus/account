@@ -10,7 +10,7 @@ import ru.sirius.account.model.entity.Category;
 import ru.sirius.account.model.entity.Article;
 
 
-public class GoodsProvider {
+public class GoodsService {
     
     public static final int CATEGORY_STEP = 100000;
 

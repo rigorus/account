@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import org.netbeans.validation.api.builtin.stringvalidation.StringValidators;
 import org.netbeans.validation.api.ui.swing.SwingValidationGroup;
-import ru.sirius.account.db.GoodsProvider;
+import ru.sirius.account.db.GoodsService;
 import ru.sirius.account.model.entity.Article;
 import ru.sirius.account.model.entity.Category;
 import ru.sirius.account.utils.Config;
 
 
-public class CreateArticlePanel extends javax.swing.JPanel {
+public class ArticlePanel extends javax.swing.JPanel {
 
     private Article article;
     private final SwingValidationGroup validationGroup = SwingValidationGroup.create();
@@ -21,10 +21,10 @@ public class CreateArticlePanel extends javax.swing.JPanel {
     /**
      * Creates new form CreateArticleFrame
      */
-    public CreateArticlePanel(Article article) throws SQLException {
+    public ArticlePanel(Article article) throws SQLException {
 
         initComponents();
-        ArrayList<Category> categories = GoodsProvider.readCategories();
+        ArrayList<Category> categories = GoodsService.readCategories();
         Category[] items = new Category[categories.size() + 1];
         System.arraycopy(categories.toArray(new Category[0]), 0, items, 1, items.length - 1);
         categoryComboBox.setModel(new DefaultComboBoxModel(items));
