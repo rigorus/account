@@ -1,17 +1,19 @@
-package ru.sirius.account.ui.partner;
+package ru.sirius.account.ui.template;
 
+import ru.sirius.account.ui.partner.*;
 import org.netbeans.validation.api.builtin.stringvalidation.StringValidators;
 import org.netbeans.validation.api.ui.swing.SwingValidationGroup;
+import ru.sirius.account.model.entity.Category;
 import ru.sirius.account.model.entity.Partner;
 
-public class PartnerPanel extends javax.swing.JPanel {
+public class TemplatePanel extends javax.swing.JPanel {
 
     private Partner partner;
     private final SwingValidationGroup validationGroup = SwingValidationGroup.create();
     /**
      * Creates new form PartnerPane
      */
-    public PartnerPanel(Partner partner) {
+    public TemplatePanel(Partner partner) {
         initComponents();
         
         validationGroup.add(fioTextField, StringValidators.REQUIRE_NON_EMPTY_STRING);
@@ -51,15 +53,15 @@ public class PartnerPanel extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         emailTextField = new javax.swing.JTextField();
 
-        jLabel4.setText("ФИО");
+        jLabel4.setText(org.openide.util.NbBundle.getMessage(TemplatePanel.class, "TemplatePanel.jLabel4.text")); // NOI18N
 
-        jLabel6.setText("Телефон");
+        jLabel6.setText(org.openide.util.NbBundle.getMessage(TemplatePanel.class, "TemplatePanel.jLabel6.text")); // NOI18N
 
         phoneTextField.setName("Телефон"); // NOI18N
 
         fioTextField.setName("ФИО"); // NOI18N
 
-        jLabel7.setText("Email");
+        jLabel7.setText(org.openide.util.NbBundle.getMessage(TemplatePanel.class, "TemplatePanel.jLabel7.text")); // NOI18N
 
         emailTextField.setName("Email"); // NOI18N
 
@@ -87,15 +89,15 @@ public class PartnerPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(phoneTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(emailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -32,6 +32,10 @@ public class AccountApplication extends javax.swing.JFrame {
         saveMenuItem = new javax.swing.JMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
+        documentMenu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         referenceMenu = new javax.swing.JMenu();
         nomenclatureMenuItem = new javax.swing.JMenuItem();
         partnerMenuItem = new javax.swing.JMenuItem();
@@ -68,6 +72,19 @@ public class AccountApplication extends javax.swing.JFrame {
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
+
+        documentMenu.setText("Документы");
+
+        jMenuItem1.setText("Расходные накладные");
+        documentMenu.add(jMenuItem1);
+
+        jMenuItem2.setText("Приходные накладные");
+        documentMenu.add(jMenuItem2);
+
+        jMenuItem3.setText("Затраты");
+        documentMenu.add(jMenuItem3);
+
+        menuBar.add(documentMenu);
 
         referenceMenu.setText("Справочники");
 
@@ -116,7 +133,7 @@ public class AccountApplication extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 396, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
 
         pack();
@@ -137,6 +154,7 @@ public class AccountApplication extends javax.swing.JFrame {
     }//GEN-LAST:event_partnerMenuItemActionPerformed
 
     private void setFrontPanel(JPanel panel){
+        getContentPane().removeAll();
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -156,9 +174,13 @@ public class AccountApplication extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenuItem contentMenuItem;
+    private javax.swing.JMenu documentMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem nomenclatureMenuItem;
     private javax.swing.JMenuItem openMenuItem;

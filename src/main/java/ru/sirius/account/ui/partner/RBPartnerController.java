@@ -34,6 +34,42 @@ public class RBPartnerController {
             model.addRow(new Object[]{partner.getFio(), partner.getPhone(), partner.getEmail()});
         }
     }
+        
+    public void createPartner(Partner partner) throws SQLException {
+        PartnerService.createPartner(partner);
+        partners.add(partner);
+        model.addRow(new Object[]{partner.getFio(), partner.getPhone(), partner.getEmail()});
+    }
+
+    public void updatePartner(Partner partner) throws SQLException{
+        PartnerService.updatePartner(partner);
+        int position = partners.indexOf(partner);
+        model.removeRow(position);
+        model.insertRow(position, new Object[]{partner.getFio(), partner.getPhone(), partner.getEmail()});
+    }
+
+    public void deletePartner(Partner partner, boolean showDeleted) throws SQLException{
+        PartnerService.deletePartner(partner);
+        int position = partners.indexOf(partner);
+        partners.remove(position);
+        model.removeRow(position);
+        deleted.add(partner);
+    }
+    
+    public void restorePartner(int position) throws SQLException{
+        if( position < 1 || position > partners.size() + deleted.size() ){
+            return;
+        }        
+        
+        Partner partner = deleted.remove(position - partners.size() - 1);
+        PartnerService.restorePartner(partner);
+        partners.add(partner);
+        model.addRow(new Object[]{partner.getFio(), partner.getPhone(), partner.getEmail()});       
+    }
+    
+    public Partner getPartner(int index) {
+        return index >= 0 && index < partners.size() ?  partners.get(index) : null;
+    }
     
     
 

@@ -86,7 +86,7 @@ public class GoodsService {
     public static void createCategory(Category category) throws SQLException{
         
         Connection connection = DbUtils.getConnection();
-        category.setId(getNextValue());
+        category.setId(DbUtils.getNextValue());
         String sql = "INSERT INTO category(category_id, category_name, weight) VALUES(?,?,?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -101,7 +101,7 @@ public class GoodsService {
     public static void createArticle(Article article) throws SQLException {
 
         Connection connection = DbUtils.getConnection();
-        article.setId(getNextValue());
+        article.setId(DbUtils.getNextValue());
         String sql = "INSERT INTO article(article_id, category_id, full_name, short_name, price, description, weight)"
                 + " VALUES(?,?,?,?,?,?,?)";
 
@@ -271,20 +271,5 @@ public class GoodsService {
             connection.rollback();
             throw ex;
         }
-    }
-
-        
-    public static int getNextValue() throws SQLException {
-        Connection connection = DbUtils.getConnection();
-
-        try (Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery("SELECT NEXTVAL('seq_id')")) {
-
-            while (rs.next()) {
-                return rs.getInt(1);
-            }
-        }
-
-        throw new SQLException("Error in next sequence value");
     }
 }

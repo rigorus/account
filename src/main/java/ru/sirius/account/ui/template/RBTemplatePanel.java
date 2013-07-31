@@ -1,25 +1,24 @@
-package ru.sirius.account.ui.partner;
+package ru.sirius.account.ui.template;
 
+import ru.sirius.account.ui.partner.*;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import org.netbeans.validation.api.ui.swing.ValidationPanel;
 import org.openide.util.Exceptions;
-import ru.sirius.account.model.entity.Partner;
 import ru.sirius.account.ui.goods.RBGoodsPanel;
 import ru.sirius.account.ui.utils.multispan.AttributiveCellTableModel;
 import ru.sirius.account.ui.utils.multispan.MultiSpanCellTable;
 
 
-public class RBPartnerPanel extends javax.swing.JPanel {
+public class RBTemplatePanel extends javax.swing.JPanel {
 
-    RBPartnerController controller;
+    RBTemplateController controller;
     /**
      * Creates new form RBPartnerPanel
      */
-    public RBPartnerPanel() {
+    public RBTemplatePanel() {
         
         initComponents();
         
@@ -30,7 +29,7 @@ public class RBPartnerPanel extends javax.swing.JPanel {
         restoreButton.setIcon(new ImageIcon(this.getClass().getResource("../restore.png")));
         
         try {
-            controller = new RBPartnerController((AttributiveCellTableModel) partnerTable.getModel());
+            controller = new RBTemplateController((AttributiveCellTableModel) partnerTable.getModel());
             controller.initialize();
         } catch (SQLException ex) {
             Logger.getLogger(RBGoodsPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -60,21 +59,21 @@ public class RBPartnerPanel extends javax.swing.JPanel {
         partnerTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(partnerTable);
 
-        addButton.setToolTipText("Добавить партнёра");
+        addButton.setToolTipText(org.openide.util.NbBundle.getMessage(RBTemplatePanel.class, "RBTemplatePanel.addButton.toolTipText")); // NOI18N
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addButtonActionPerformed(evt);
             }
         });
 
-        editButton.setToolTipText("Редактировать данные");
+        editButton.setToolTipText(org.openide.util.NbBundle.getMessage(RBTemplatePanel.class, "RBTemplatePanel.editButton.toolTipText")); // NOI18N
         editButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editButtonActionPerformed(evt);
             }
         });
 
-        deleteButton.setToolTipText("Приостановить взаимоотношения");
+        deleteButton.setToolTipText(org.openide.util.NbBundle.getMessage(RBTemplatePanel.class, "RBTemplatePanel.deleteButton.toolTipText")); // NOI18N
         deleteButton.setRolloverEnabled(false);
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,14 +81,14 @@ public class RBPartnerPanel extends javax.swing.JPanel {
             }
         });
 
-        hiddenButton.setToolTipText("Прошлые отношения");
+        hiddenButton.setToolTipText(org.openide.util.NbBundle.getMessage(RBTemplatePanel.class, "RBTemplatePanel.hiddenButton.toolTipText")); // NOI18N
         hiddenButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hiddenButtonActionPerformed(evt);
             }
         });
 
-        restoreButton.setToolTipText("Подружиться заново");
+        restoreButton.setToolTipText(org.openide.util.NbBundle.getMessage(RBTemplatePanel.class, "RBTemplatePanel.restoreButton.toolTipText")); // NOI18N
         restoreButton.setEnabled(false);
         restoreButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,7 +129,7 @@ public class RBPartnerPanel extends javax.swing.JPanel {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         try {
-            PartnerPanel panel = new PartnerPanel(null);
+            TemplatePanel panel = new TemplatePanel(null);
             ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
             validationPanel.setInnerComponent(panel);
             if (validationPanel.showOkCancelDialog("Внести в справочник")) {
@@ -143,50 +142,90 @@ public class RBPartnerPanel extends javax.swing.JPanel {
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
 
-        Partner partner = controller.getPartner(partnerTable.getSelectedRow());
-        if (partner == null) {
-            return;
-        }
+//        RBGoodsController.Row row = builder.getRow(goodsTable.getSelectedRow());
+//        if (row == null) {
+//            return;
+//        }
+//
+//        if( row.rowtype == RBGoodsController.ROWTYPE.CATEGORY){
+//            CategoryPanel panel = new CategoryPanel(row.category);
+//            ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
+//            validationPanel.setInnerComponent(panel);
+//            if (validationPanel.showOkCancelDialog("Редактирование категории")) {
+//                try {
+//                    row.category = panel.getCategory();
+//                    builder.updateRow(row);
+//                } catch (SQLException ex) {
+//                    Exceptions.printStackTrace(ex);
+//                }
+//            }
+//        }else if( row.article != null){
+//            try {
+//                ArticlePanel panel = new ArticlePanel(row.article);
+//                ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
+//                validationPanel.setInnerComponent(panel);
+//                if (validationPanel.showOkCancelDialog("Редактирование артикула")) {
+//                    row.article = panel.getArticle();
+//                    builder.updateRow(row);
+//                }
+//            } catch (SQLException ex) {
+//                Exceptions.printStackTrace(ex);
+//            }
+//        }
 
-        PartnerPanel panel = new PartnerPanel(partner);
-        ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
-        validationPanel.setInnerComponent(panel);
-        if (validationPanel.showOkCancelDialog("Редактирование контакта")) {
-            try {
-                controller.updatePartner(panel.getPartner());
-            } catch (SQLException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-        }
     }//GEN-LAST:event_editButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-                
-        Partner partner = controller.getPartner(partnerTable.getSelectedRow());
-        try {
-           if (partner != null && JOptionPane.YES_OPTION ==
-                JOptionPane.showConfirmDialog(this, "Удалить контакт?", "Удаление", JOptionPane.YES_NO_OPTION)) {
-                controller.deletePartner(partner, hiddenButton.isSelected());
-            }
-        } catch (SQLException ex) {
-            Exceptions.printStackTrace(ex);
-        }
+//        try {
+//
+//            RBGoodsController.Row row = builder.getRow(goodsTable.getSelectedRow());
+//            if (row == null) {
+//                return;
+//            }
+//
+//            if (row.rowtype == RBGoodsController.ROWTYPE.CATEGORY &&  JOptionPane.YES_OPTION ==
+//                JOptionPane.showConfirmDialog(this, "Удалить директорию и все артикулы, входящие в неё?",
+//                    "Удаление", JOptionPane.YES_NO_OPTION)) {
+//                builder.removeRow(row, hiddenButton.isSelected());
+//
+//            } else if (row.rowtype == RBGoodsController.ROWTYPE.ARTICLE && JOptionPane.YES_OPTION ==
+//                JOptionPane.showConfirmDialog(this, "Удалить артикул?", "Удаление", JOptionPane.YES_NO_OPTION)) {
+//                builder.removeRow(row, hiddenButton.isSelected());
+//            }
+//        } catch (SQLException ex) {
+//            Exceptions.printStackTrace(ex);
+//        }
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void hiddenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hiddenButtonActionPerformed
 
-        boolean show = hiddenButton.isSelected();
-        restoreButton.setEnabled(show);
+//        boolean show = hiddenButton.isSelected();
+//        restoreButton.setEnabled(show);
 //        builder.showDeleted(show);
 
     }//GEN-LAST:event_hiddenButtonActionPerformed
 
     private void restoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restoreButtonActionPerformed
-        try {
-            controller.restorePartner(partnerTable.getSelectedRow());
-        } catch (SQLException ex) {
-            Exceptions.printStackTrace(ex);
-        }
+
+//        int position = goodsTable.getSelectedRow();
+//        if (position == -1) {
+//            return;
+//        }
+//
+//        Article article = builder.getDeletedArticle(position);
+//
+//        if( article != null){
+//            try {
+//                ArticlePanel panel = new ArticlePanel(article);
+//                ValidationPanel validationPanel = new ValidationPanel(panel.getValidationGroup());
+//                validationPanel.setInnerComponent(panel);
+//                if (validationPanel.showOkCancelDialog("Восстановление артикула")) {
+//                    builder.restoreArticle(panel.getArticle());
+//                }
+//            } catch (SQLException ex) {
+//                Exceptions.printStackTrace(ex);
+//            }
+//        }
     }//GEN-LAST:event_restoreButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

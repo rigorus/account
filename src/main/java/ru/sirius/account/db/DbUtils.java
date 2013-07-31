@@ -2,7 +2,9 @@ package ru.sirius.account.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import org.apache.log4j.Logger;
 import ru.sirius.account.utils.Config;
 
@@ -38,5 +40,19 @@ public class DbUtils {
             }
         }
     }
-        
+       
+    public static int getNextValue() throws SQLException {
+        Connection connection = DbUtils.getConnection();
+
+        try (Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery("SELECT NEXTVAL('seq_id')")) {
+
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+
+        throw new SQLException("Error in next sequence value");
+    }
+    
 }
